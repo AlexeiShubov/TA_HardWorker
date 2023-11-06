@@ -28,16 +28,10 @@ public sealed class Bank
     {
         _model.Set(NamesEvent.Currency, Currency.CurrentAmount);
 
-        _model.EventManager.AddAction($"On{NamesEvent.Currency}Changed", PrintData);
         _model.EventManager.AddAction(NamesEvent.NeutralState, OnNeutralState);
         _model.EventManager.AddAction(NamesEvent.HomeState, OnHomeState);
         _model.EventManager.AddAction(NamesEvent.WorkState, OnWorkState);
         _model.EventManager.AddAction(NamesEvent.ShopState, OnShopState);
-    }
-
-    private void PrintData()
-    {
-        Debug.LogError(Currency.CurrentAmount);
     }
 
     private void OnNeutralState()
