@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/projectSettingsUpdater.xml
+/modules.xml
+/contentModel.xml
+/.idea.TA_HardWorker.iml
+# Datasource local storage ignored files
+/../../../../../../:\GitHub\TA_HardWorker\.idea\.idea.TA_HardWorker\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
