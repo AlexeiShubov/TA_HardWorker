@@ -1,6 +1,7 @@
 using AxGrid;
 using AxGrid.Base;
 using AxGrid.FSM;
+using AxGrid.Path;
 using UnityEngine;
 
 public sealed class Initializer : MonoBehaviourExt
@@ -8,6 +9,7 @@ public sealed class Initializer : MonoBehaviourExt
     [SerializeField] private SOGlobalSettings _soGlobalSettings;
     [SerializeField] private ViewController _viewController;
     [SerializeField] private GameController _gameController;
+    [SerializeField] private Character _character;
     
     private Bank _bank;
     
@@ -15,7 +17,7 @@ public sealed class Initializer : MonoBehaviourExt
     private void Init()
     {
         _bank = new Bank(this, Model, _soGlobalSettings);
-        _viewController.Init();
+        _viewController.Init(_character, _soGlobalSettings);
         _gameController.Init(_bank, _viewController);
         
         StatesInitialize();

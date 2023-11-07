@@ -1,6 +1,5 @@
 using AxGrid.FSM;
 using AxGrid.Model;
-using UnityEngine;
 
 public abstract class BaseState : FSMState
 {
@@ -13,7 +12,6 @@ public abstract class BaseState : FSMState
     
     protected virtual void GoToNextState(string nextStateName)
     {
-        Debug.Log($"Exit state {this}");
         Parent.Change(nextStateName);
     }
 

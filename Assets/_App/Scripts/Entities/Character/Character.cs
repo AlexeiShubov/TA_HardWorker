@@ -1,11 +1,17 @@
+using System;
 using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    private SOGlobalSettings _soGlobalSettings;
+    private IMovable _iMovable;
 
-    public void Init(SOGlobalSettings soGlobalSettings)
+    public void Init(IMovable iMovable)
     {
-        _soGlobalSettings = soGlobalSettings;
+        _iMovable = iMovable;
+    }
+
+    public void Move(Transform targetPosition, Action callback = null)
+    {
+        _iMovable.Move(transform, targetPosition, callback);
     }
 }

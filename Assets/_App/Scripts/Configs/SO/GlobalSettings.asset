@@ -18,3 +18,4 @@ MonoBehaviour:
   <DefaultCurrencyAmount>k__BackingField: 10
   <CurrencyAmountAdd>k__BackingField: 1
   <CurrencyAmountSpend>k__BackingField: 2
+  <CharacterMoveSpeed>k__BackingField: 20

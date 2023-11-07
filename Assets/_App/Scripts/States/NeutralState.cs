@@ -11,7 +11,6 @@ public sealed class NeutralState : BaseState
     }
     
     [Bind(NamesEvent.FinishPath)]
-    [One(1f)]
     private void Exit()
     {
         var nextStateName = Model.Get<string>(NamesEvent.NextState);

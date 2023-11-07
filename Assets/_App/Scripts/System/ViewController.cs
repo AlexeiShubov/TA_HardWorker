@@ -11,11 +11,23 @@ public class ViewController : MonoBehaviourExtBind
     [Space(10)] 
     [SerializeField] private List<States> _states;
     [SerializeField] private List<Color> _stateColors;
-
+    [Space(10)]
+    [SerializeField] private Transform _shop;
+    [SerializeField] private Transform _work;
+    [SerializeField] private Transform _home;
+    
+    private Character _character;
+    private SOGlobalSettings _soGlobalSettings;
     private Dictionary<string, Color> _colorsMap;
 
-    public void Init()
+    public void Init(Character character, SOGlobalSettings soGlobalSettings)
     {
+        Path = new CPath();
+        
+        _character = character;
+        _soGlobalSettings = soGlobalSettings;
+        _character.Init(new PathMove(Path, _soGlobalSettings));
+        
         ColorsMapInitialize();
     }
     
@@ -30,6 +42,8 @@ public class ViewController : MonoBehaviourExtBind
         Model.Set(NamesEvent.HomeButton, false);
         Model.Set(NamesEvent.WorkButton, true);
         Model.Set(NamesEvent.ShopButton, true);
+        
+        _character.Move(_home);
     }
     
     [Bind(NamesEvent.ShopButton)]
@@ -38,6 +52,8 @@ public class ViewController : MonoBehaviourExtBind
         Model.Set(NamesEvent.HomeButton, true);
         Model.Set(NamesEvent.WorkButton, true);
         Model.Set(NamesEvent.ShopButton, false);
+        
+        _character.Move(_shop);
     }
     
     [Bind(NamesEvent.WorkButton)]
@@ -46,6 +62,8 @@ public class ViewController : MonoBehaviourExtBind
         Model.Set(NamesEvent.HomeButton, true);
         Model.Set(NamesEvent.WorkButton, false);
         Model.Set(NamesEvent.ShopButton, true);
+        
+        _character.Move(_work);
     }
 
     private void ColorsMapInitialize()
@@ -67,8 +85,6 @@ public class ViewController : MonoBehaviourExtBind
 
     private void ChangeColor(string nameState)
     {
-        Path = new CPath();
-
         Path.EasingLinear(0f, 0f, 1f, f => _backGround.color = Color.Lerp(_backGround.color, _colorsMap[nameState], f));
     }
 }
