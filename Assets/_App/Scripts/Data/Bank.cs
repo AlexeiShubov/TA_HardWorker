@@ -8,10 +8,9 @@ public sealed class Bank
     private readonly SOGlobalSettings _soGlobalSettings;
     private readonly MonoBehaviourExt _monoBehaviourExt;
     private readonly DynamicModel _model;
+    private readonly Currency _currency;
 
     private Coroutine _currentCoroutine;
-    
-    public Currency Currency { get; }
 
     public Bank(MonoBehaviourExt monoBehaviourExt, DynamicModel model, SOGlobalSettings soGlobalSettings)
     {
@@ -19,19 +18,27 @@ public sealed class Bank
         _model = model;
         _soGlobalSettings = soGlobalSettings;
         
-        Currency = new Currency(_model, _soGlobalSettings);
-        
-        Subscribe();
+        _currency = new Currency(_model, _soGlobalSettings);
+        _model.Set(NamesEvent.Currency, _currency.CurrentAmount);
     }
 
-    private void Subscribe()
+    public void OnChangeState(string nameState)
     {
-        _model.Set(NamesEvent.Currency, Currency.CurrentAmount);
-
-        _model.EventManager.AddAction(NamesEvent.NeutralState, OnNeutralState);
-        _model.EventManager.AddAction(NamesEvent.HomeState, OnHomeState);
-        _model.EventManager.AddAction(NamesEvent.WorkState, OnWorkState);
-        _model.EventManager.AddAction(NamesEvent.ShopState, OnShopState);
+        switch (nameState)
+        {
+            case NamesEvent.NeutralState:
+                OnNeutralState();
+                break;
+            case NamesEvent.HomeState:
+                OnHomeState();
+                break;
+            case NamesEvent.WorkState:
+                OnWorkState();
+                break;
+            case NamesEvent.ShopState:
+                OnShopState();
+                break;
+        }
     }
 
     private void OnNeutralState()
@@ -77,7 +84,7 @@ public sealed class Bank
         {
             yield return delay;
             
-            Currency.AddCurrency(_soGlobalSettings.CurrencyAmountAdd);
+            _currency.AddCurrency(_soGlobalSettings.CurrencyAmountAdd);
         }
     }
 
@@ -89,7 +96,7 @@ public sealed class Bank
         {
             yield return delay;
             
-            Currency.SpendCurrency(_soGlobalSettings.CurrencyAmountSpend);
+            _currency.SpendCurrency(_soGlobalSettings.CurrencyAmountSpend);
         }
     }
 }

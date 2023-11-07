@@ -6,13 +6,17 @@ using UnityEngine;
 public sealed class Initializer : MonoBehaviourExt
 {
     [SerializeField] private SOGlobalSettings _soGlobalSettings;
+    [SerializeField] private ViewController _viewController;
+    [SerializeField] private GameController _gameController;
     
     private Bank _bank;
     
-    [OnStart]
+    [OnAwake]
     private void Init()
     {
         _bank = new Bank(this, Model, _soGlobalSettings);
+        _viewController.Init();
+        _gameController.Init(_bank, _viewController);
         
         StatesInitialize();
     }
