@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using AxGrid.Base;
+using AxGrid.Model;
+using AxGrid.Path;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +24,30 @@ public class ViewController : MonoBehaviourExtBind
         ChangeColor(nameState);
     }
 
+    [Bind(NamesEvent.HomeButton)]
+    private void ChangeHomeButtonState()
+    {
+        Model.Set(NamesEvent.HomeButton, false);
+        Model.Set(NamesEvent.WorkButton, true);
+        Model.Set(NamesEvent.ShopButton, true);
+    }
+    
+    [Bind(NamesEvent.ShopButton)]
+    private void ChangeShopButtonState()
+    {
+        Model.Set(NamesEvent.HomeButton, true);
+        Model.Set(NamesEvent.WorkButton, true);
+        Model.Set(NamesEvent.ShopButton, false);
+    }
+    
+    [Bind(NamesEvent.WorkButton)]
+    private void ChangeWorkButtonState()
+    {
+        Model.Set(NamesEvent.HomeButton, true);
+        Model.Set(NamesEvent.WorkButton, false);
+        Model.Set(NamesEvent.ShopButton, true);
+    }
+
     private void ColorsMapInitialize()
     {
         if (_states.Count != _stateColors.Count)
@@ -41,6 +67,8 @@ public class ViewController : MonoBehaviourExtBind
 
     private void ChangeColor(string nameState)
     {
-        _backGround.color = _colorsMap[nameState];
+        Path = new CPath();
+
+        Path.EasingLinear(0f, 0f, 1f, f => _backGround.color = Color.Lerp(_backGround.color, _colorsMap[nameState], f));
     }
 }

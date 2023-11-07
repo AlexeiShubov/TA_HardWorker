@@ -4,26 +4,25 @@ using AxGrid.Model;
 [State(NamesEvent.NeutralState)]
 public sealed class NeutralState : BaseState
 {
-    protected override void Enter()
+    [Enter]
+    private void Enter()
     {
         Model.EventManager.Invoke(NamesEvent.EnterState, NamesEvent.NeutralState);
-        Model.EventManager.Invoke(NamesEvent.NeutralState);
-        base.Enter();
     }
-
-    [Bind(NamesEvent.ExitState)]
-    [One(2f)]
+    
+    [Bind(NamesEvent.FinishPath)]
+    [One(1f)]
     private void Exit()
     {
         var nextStateName = Model.Get<string>(NamesEvent.NextState);
 
         if (string.IsNullOrEmpty(nextStateName))
         {
-            GoToNextSTate(NamesEvent.NeutralState);
+            GoToNextState(NamesEvent.NeutralState);
             
             return;
         }
 
-        GoToNextSTate(nextStateName);
+        GoToNextState(nextStateName);
     }
 }

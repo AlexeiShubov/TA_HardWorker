@@ -344,7 +344,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalModel: 0
   buttonName: ShopState
-  enableField: 
+  enableField: OnShopStateClick
   defaultEnable: 1
   keyField: 
   key: 
@@ -852,7 +852,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalModel: 0
   buttonName: WorkState
-  enableField: 
+  enableField: OnWorkStateClick
   defaultEnable: 1
   keyField: 
   key: 
@@ -1226,7 +1226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalModel: 0
   buttonName: HomeState
-  enableField: 
+  enableField: OnHomeStateClick
   defaultEnable: 1
   keyField: 
   key: 

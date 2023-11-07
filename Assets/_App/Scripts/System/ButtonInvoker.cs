@@ -22,6 +22,6 @@ public sealed class ButtonInvoker : MonoBehaviourExt
             return;
         }
         
-        Settings.Fsm.Invoke(NamesEvent.ExitState, _nextStateName.ToString());
+        Settings.Fsm.Invoke(NamesEvent.FinishPath, _nextStateName.ToString());
     }
 }

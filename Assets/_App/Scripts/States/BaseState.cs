@@ -4,20 +4,14 @@ using UnityEngine;
 
 public abstract class BaseState : FSMState
 {
-    [Enter]
-    protected virtual void Enter()
-    {
-        Debug.Log($"Enter state {this}");
-    }
-    
     [Bind("OnBtn")]
     protected void OnChangeState(string nextStateName)
     {
         WriteNextStateName(nextStateName);
-        GoToNextSTate(NamesEvent.NeutralState);
+        GoToNextState(NamesEvent.NeutralState);
     }
     
-    protected virtual void GoToNextSTate(string nextStateName)
+    protected virtual void GoToNextState(string nextStateName)
     {
         Debug.Log($"Exit state {this}");
         Parent.Change(nextStateName);
