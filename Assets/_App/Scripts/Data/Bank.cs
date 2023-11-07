@@ -19,7 +19,7 @@ public sealed class Bank
         _model = model;
         _soGlobalSettings = soGlobalSettings;
         
-        Currency = new Currency(_soGlobalSettings);
+        Currency = new Currency(_model, _soGlobalSettings);
         
         Subscribe();
     }

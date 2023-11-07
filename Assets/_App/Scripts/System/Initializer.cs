@@ -27,10 +27,10 @@ public sealed class Initializer : MonoBehaviourExt
     {
         Settings.Fsm = new FSM();
         
-        Settings.Fsm.Add(new NeutralState(_soGlobalSettings, this));
-        Settings.Fsm.Add(new HomeState(_soGlobalSettings));
-        Settings.Fsm.Add(new ShopState(_soGlobalSettings));
-        Settings.Fsm.Add(new WorkState(_soGlobalSettings));
+        Settings.Fsm.Add(new NeutralState());
+        Settings.Fsm.Add(new HomeState());
+        Settings.Fsm.Add(new ShopState());
+        Settings.Fsm.Add(new WorkState());
         
         Settings.Fsm.Start(_soGlobalSettings.DefaultStateName.ToString());
     }

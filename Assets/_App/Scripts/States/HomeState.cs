@@ -1,28 +1,13 @@
 using AxGrid.FSM;
-using AxGrid.Model;
-using UnityEngine;
 
 [State(NamesEvent.HomeState)]
-public sealed class HomeState : FSMState
+public sealed class HomeState : BaseState
 {
-    private readonly SOGlobalSettings _soGlobalSettings;
-    
-    public HomeState(SOGlobalSettings soGlobalSettings)
-    {
-        _soGlobalSettings = soGlobalSettings;
-    }
-    
-    [Enter]
-    public void Enter()
+    protected override void Enter()
     {
         Model.EventManager.Invoke(NamesEvent.HomeState);
-        Debug.Log($"Enter state {this}");
+        base.Enter();
     }
+    
 
-    [Bind(NamesEvent.ExitState)]
-    public void Exit(string newStateName)
-    {
-        Parent.Change(newStateName);
-        Debug.Log($"Exit state {this}");
-    }
 }

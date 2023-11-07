@@ -1,12 +1,16 @@
+using AxGrid.Model;
 using UnityEngine;
 
 public class Currency
 {
-    private SOGlobalSettings _soGlobalSettings;
+    private readonly SOGlobalSettings _soGlobalSettings;
+    private readonly DynamicModel _model;
+    
     private int _currentAmount;
 
-    public Currency(SOGlobalSettings soGlobalSettings)
+    public Currency(DynamicModel model, SOGlobalSettings soGlobalSettings)
     {
+        _model = model;
         _soGlobalSettings = soGlobalSettings; 
         _currentAmount = _soGlobalSettings.DefaultCurrencyAmount;
     }
@@ -27,6 +31,7 @@ public class Currency
         if (CheckCorrectedData(amount))
         {
             CurrentAmount += amount;
+            _model.Set(NamesEvent.Currency, CurrentAmount);
         }
     }
 
@@ -38,12 +43,13 @@ public class Currency
 
         if (newValue < 0f)
         {
-            Debug.Log("Вас с воплями толкает продавец магазина: \nИди работай, бомж! У тебя закончились бабки!");
+            Debug.Log("Вас с воплями толкает продавец магазина: \n Иди работай, бомж! У тебя закончились бабки!");
 
             return;
         }
 
         CurrentAmount = newValue;
+        _model.Set(NamesEvent.Currency, CurrentAmount);
     }
 
 
