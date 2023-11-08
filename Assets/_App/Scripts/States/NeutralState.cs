@@ -5,9 +5,11 @@ using AxGrid.Model;
 public sealed class NeutralState : BaseState
 {
     [Enter]
-    private void Enter()
+    protected override void Enter()
     {
         Model.EventManager.Invoke(NamesEvent.EnterState, NamesEvent.NeutralState);
+        Model.Set(NamesEvent.Defaulter, null);
+        base.Enter();
     }
     
     [Bind(NamesEvent.FinishPath)]
@@ -21,7 +23,7 @@ public sealed class NeutralState : BaseState
             
             return;
         }
-
+        
         GoToNextState(nextStateName);
     }
 }

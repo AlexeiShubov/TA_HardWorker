@@ -1,7 +1,6 @@
 using AxGrid;
 using AxGrid.Base;
 using AxGrid.FSM;
-using AxGrid.Path;
 using UnityEngine;
 
 public sealed class Initializer : MonoBehaviourExt

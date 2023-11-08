@@ -22,11 +22,9 @@ public class ViewController : MonoBehaviourExtBind
 
     public void Init(Character character, SOGlobalSettings soGlobalSettings)
     {
-        Path = new CPath();
-        
         _character = character;
         _soGlobalSettings = soGlobalSettings;
-        _character.Init(new PathMove(Path, _soGlobalSettings));
+        _character.Init(new PathMove(Path, _soGlobalSettings), new FlipByX());
         
         ColorsMapInitialize();
     }
@@ -39,31 +37,32 @@ public class ViewController : MonoBehaviourExtBind
     [Bind(NamesEvent.HomeButton)]
     private void ChangeHomeButtonState()
     {
-        Model.Set(NamesEvent.HomeButton, false);
-        Model.Set(NamesEvent.WorkButton, true);
-        Model.Set(NamesEvent.ShopButton, true);
-        
+        ButtonsBlock();
+
         _character.Move(_home);
     }
     
     [Bind(NamesEvent.ShopButton)]
     private void ChangeShopButtonState()
     {
-        Model.Set(NamesEvent.HomeButton, true);
-        Model.Set(NamesEvent.WorkButton, true);
-        Model.Set(NamesEvent.ShopButton, false);
-        
+        ButtonsBlock();
+
         _character.Move(_shop);
     }
     
     [Bind(NamesEvent.WorkButton)]
     private void ChangeWorkButtonState()
     {
-        Model.Set(NamesEvent.HomeButton, true);
-        Model.Set(NamesEvent.WorkButton, false);
-        Model.Set(NamesEvent.ShopButton, true);
-        
+        ButtonsBlock();
+
         _character.Move(_work);
+    }
+
+    private void ButtonsBlock()
+    {
+        Model.Set(NamesEvent.HomeButton, false);
+        Model.Set(NamesEvent.WorkButton, false);
+        Model.Set(NamesEvent.ShopButton, false);
     }
 
     private void ColorsMapInitialize()
@@ -85,6 +84,6 @@ public class ViewController : MonoBehaviourExtBind
 
     private void ChangeColor(string nameState)
     {
-        Path.EasingLinear(0f, 0f, 1f, f => _backGround.color = Color.Lerp(_backGround.color, _colorsMap[nameState], f));
+        Path.EasingLinear(_soGlobalSettings.DelayToChangeColorBG, 0f, 1f, f => _backGround.color = Color.Lerp(_backGround.color, _colorsMap[nameState], f));
     }
 }

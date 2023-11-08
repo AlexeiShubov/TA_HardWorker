@@ -15,7 +15,8 @@ MonoBehaviour:
   <DefaultStateName>k__BackingField: 2
   <SpendCurrencyDelay>k__BackingField: 1
   <AddCurrencyDelay>k__BackingField: 1
-  <DefaultCurrencyAmount>k__BackingField: 10
+  <DefaultCurrencyAmount>k__BackingField: 3
   <CurrencyAmountAdd>k__BackingField: 1
   <CurrencyAmountSpend>k__BackingField: 2
-  <CharacterMoveSpeed>k__BackingField: 20
+  <DelayAnimationCharacterMove>k__BackingField: 2
+  <DelayToChangeColorBG>k__BackingField: 0

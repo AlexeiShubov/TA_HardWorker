@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Currency
 {
+    private const string MESSAGE = "Вас с воплями толкает продавец магазина: \nИди работай, бомж! У тебя недостаточ бабок!";
+        
     private readonly SOGlobalSettings _soGlobalSettings;
     private readonly DynamicModel _model;
     
@@ -22,7 +24,6 @@ public class Currency
         private set
         {
             _currentAmount = value;
-            Debug.Log(_currentAmount);
         }
     }
     
@@ -43,7 +44,7 @@ public class Currency
 
         if (newValue < 0f)
         {
-            Debug.Log("Вас с воплями толкает продавец магазина: \n Иди работай, бомж! У тебя закончились бабки!");
+            _model.Set(NamesEvent.Defaulter, MESSAGE);
 
             return;
         }

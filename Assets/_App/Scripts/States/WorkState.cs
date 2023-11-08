@@ -4,8 +4,9 @@ using AxGrid.FSM;
 public sealed class WorkState : BaseState
 {
     [Enter]
-    private void Enter()
+    protected override void Enter()
     {
         Model.EventManager.Invoke(NamesEvent.EnterState, NamesEvent.WorkState);
+        base.Enter();
     }
 }

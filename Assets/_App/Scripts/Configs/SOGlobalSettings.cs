@@ -10,5 +10,6 @@ public sealed class SOGlobalSettings : ScriptableObject
     [field: SerializeField] public int CurrencyAmountAdd { get; private set; }
     [field: SerializeField] public int CurrencyAmountSpend { get; private set; }
     
-    [field: SerializeField] public int CharacterMoveSpeed { get; private set; }
+    [field: SerializeField] public float DelayAnimationCharacterMove { get; private set; }
+    [field: SerializeField] public float DelayToChangeColorBG { get; private set; }
 }
