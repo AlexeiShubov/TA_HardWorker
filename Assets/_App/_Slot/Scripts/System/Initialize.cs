@@ -5,10 +5,17 @@ using UnityEngine;
 
 public class Initialize : MonoBehaviourExt
 {
+    [SerializeField] private Block[] _blocks;
+    
     [OnAwake]
     private void Init()
     {
         StatesInitialize();
+
+        foreach (var block in _blocks)
+        {
+            block.Init(_blocks[^1].transform, _blocks[0].transform);
+        }
     }
 
     [OnUpdate]
