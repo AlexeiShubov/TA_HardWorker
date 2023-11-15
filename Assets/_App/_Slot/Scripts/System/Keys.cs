@@ -10,5 +10,5 @@ public static class Keys
     
     public const string IdleState = "IdleState";
     public const string MovingState = "MovingState";
-    public const string StopingState = "StopingState";
+    public const string StoppingState = "StoppingState";
 }

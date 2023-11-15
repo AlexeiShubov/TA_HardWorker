@@ -1,36 +1,50 @@
+using System.Collections.Generic;
 using AxGrid.Base;
 using AxGrid.Path;
 using UnityEngine;
 
 public sealed class PathMoveBlock : MonoBehaviourExt
 {
-    private Vector2 _targetPosition;
-    private Vector2 _defaultPosition;
-    private Transform _transform;
+    private Vector3 _targetPosition;
+    private List<Transform> _blocksTransform;
+    
+    private float _movingSpeed;
 
-    public void Init(Block block, Vector2 targetPosition, Vector2 defaultPosition)
+    public void Init(Block[] blocks, float moveSpeed, Vector2 targetPosition)
     {
-        _targetPosition = targetPosition + new Vector2(0f, block.transform.localScale.y - 161f);
-        _defaultPosition = defaultPosition;
-        _transform = block.GetComponent<Transform>();
+        _blocksTransform = new List<Transform>();
+        
+        foreach (var block in blocks)
+        {
+            _blocksTransform.Add(block.transform);
+        }
 
-        Path = new CPath();
-        MoveBlock();
+        _movingSpeed = moveSpeed;
+        _targetPosition = targetPosition;
+    }
+    
+    public void MoveBlocks()
+    {
+        Path = CPath.Create();
+        
+        Path
+            .EasingLinear(10, 0, 1, f =>
+            {
+                foreach (var blockTransform in _blocksTransform)
+                {
+                    if (blockTransform.localPosition.y <= _targetPosition.y)
+                    {
+                        blockTransform.SetAsFirstSibling();
+                    }
+                    
+                    blockTransform.localPosition = new Vector3(0f, blockTransform.localPosition.y - _movingSpeed * Time.deltaTime);
+                }
+            })
+            .Action(MoveBlocks);
     }
 
-    public void MoveBlock()
+    public void StopBlocks()
     {
-        var startPosition = _transform.localPosition;
-        var delay = ((Vector2)_transform.localPosition - _targetPosition) / 3f;
-        
-        Path.EasingLinear(delay.y / 100, 0, 1, f =>
-            {
-                _transform.localPosition = Vector2.Lerp(startPosition, _targetPosition, f);
-            })
-            .Action(() =>
-            {
-                _transform.localPosition = _defaultPosition;
-                MoveBlock();
-            });
+        Path = null;
     }
 }
