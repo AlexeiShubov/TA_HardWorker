@@ -4,8 +4,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(PathMoveBlock)), RequireComponent(typeof(PathStoppingBlock))]
 public class Slot : MonoBehaviour
 {
-    private const float MOVE_SPEED_BLOCKS = 3000f;
-
     [SerializeField] private GridLayoutGroup _gridLayoutGroup;
     [SerializeField] private Block[] _blocks;
     
@@ -23,8 +21,8 @@ public class Slot : MonoBehaviour
         _targetPosition = GetTargetPosition();
         _topPosition = GetTopPosition();
 
-        _pathMoveBlock.Init(_blocks, MOVE_SPEED_BLOCKS, _targetPosition);
-        _pathStoppingBlock.Init(_blocks, MOVE_SPEED_BLOCKS, _targetPosition, _topPosition);
+        _pathMoveBlock.Init(_blocks, _targetPosition);
+        _pathStoppingBlock.Init(_blocks, _targetPosition, _topPosition, _gridLayoutGroup);
         _gridLayoutGroup.enabled = true;
         BlockInitialization();
     }
@@ -72,7 +70,7 @@ public class Slot : MonoBehaviour
     {
         foreach (var block in _blocks)
         {
-            block.GetComponent<Image>().color = Color.white;
+            block.ActiveFrameEffect(false);
             block.ChangeSprite(movingStatus);
         }
     }

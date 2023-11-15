@@ -9,6 +9,7 @@ public class IdleState : BaseFSMState
     private void Enter()
     {
         Debug.Log("Enter IdleState");
+        Model.EventManager.Invoke(Keys.IdleState);
     }
     
     [Bind(Keys.OnClickSomeButton)]

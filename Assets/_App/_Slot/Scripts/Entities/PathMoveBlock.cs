@@ -5,12 +5,12 @@ using UnityEngine;
 
 public sealed class PathMoveBlock : MonoBehaviourExt
 {
+    private const float MOVE_SPEED_BLOCKS = 2000f;
+    
     private Vector3 _targetPosition;
     private List<Transform> _blocksTransform;
-    
-    private float _movingSpeed;
 
-    public void Init(Block[] blocks, float moveSpeed, Vector2 targetPosition)
+    public void Init(Block[] blocks, Vector2 targetPosition)
     {
         _blocksTransform = new List<Transform>();
         
@@ -18,8 +18,7 @@ public sealed class PathMoveBlock : MonoBehaviourExt
         {
             _blocksTransform.Add(block.transform);
         }
-
-        _movingSpeed = moveSpeed;
+        
         _targetPosition = targetPosition;
     }
     
@@ -37,7 +36,7 @@ public sealed class PathMoveBlock : MonoBehaviourExt
                         blockTransform.SetAsFirstSibling();
                     }
                     
-                    blockTransform.localPosition = new Vector3(0f, blockTransform.localPosition.y - _movingSpeed * Time.deltaTime);
+                    blockTransform.localPosition = new Vector3(0f, blockTransform.localPosition.y - MOVE_SPEED_BLOCKS * Time.deltaTime);
                 }
             })
             .Action(MoveBlocks);

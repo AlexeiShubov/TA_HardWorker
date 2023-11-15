@@ -7,9 +7,10 @@ using UnityEngine.UI;
 
 public class PathStoppingBlock : MonoBehaviourExt
 {
-    private const float _ADDITIONAL_TIME_DELAY = 2f;
-    private const float _MIDLE_OFFSET = 80f;
-    private const float _SPRING_SPEED_OFFSET = 0.25f;
+    private const float MOVE_SPEED_BLOCKS = 2000f;
+    private const float _ADDITIONAL_TIME_DELAY = 3f;
+    private const float _MIDLE_OFFSET = 40f;
+    private const float _SPRING_SPEED_OFFSET = 0.5f;
 
     private Block[] _blocks;
     private Vector3 _midlePosition;
@@ -17,20 +18,19 @@ public class PathStoppingBlock : MonoBehaviourExt
     private Vector3 _targetPosition;
     private Vector3 _topPosition;
     private List<Transform> _blocksTransform;
-    
-    private float _movingSpeed;
+    private GridLayoutGroup _gridLayoutGroup;
 
-    public void Init(Block[] blocks, float moveSpeed, Vector2 targetPosition, Vector2 topPosition)
+    public void Init(Block[] blocks, Vector2 targetPosition, Vector2 topPosition, GridLayoutGroup gridLayoutGroup)
     {
         _blocks = blocks;
         _blocksTransform = new List<Transform>();
+        _gridLayoutGroup = gridLayoutGroup;
         
         foreach (var block in blocks)
         {
             _blocksTransform.Add(block.transform);
         }
 
-        _movingSpeed = moveSpeed;
         _midlePosition = _blocksTransform[^2].localPosition;
         _offsetPosition = _midlePosition - new Vector3(0f, _MIDLE_OFFSET);
 
@@ -54,25 +54,21 @@ public class PathStoppingBlock : MonoBehaviourExt
                         blockTransform.SetAsFirstSibling();
                     }
 
-                    blockTransform.localPosition = new Vector3(0f, blockTransform.localPosition.y - _movingSpeed * Time.deltaTime);
+                    blockTransform.localPosition = new Vector3(0f, blockTransform.localPosition.y - MOVE_SPEED_BLOCKS * Time.deltaTime);
                 }
                 
                 if (winningTransform.localPosition.y <= _offsetPosition.y)
                 {
-                    Debug.LogWarning(winningBlock.transform.localPosition.y + " " + _offsetPosition.y + " " + winningBlock);
-                    winningBlock.GetComponent<Image>().color = Color.black;
-
-                    Spring(winningBlock.transform);
+                    Spring(winningBlock);
                 }
             });
     }
 
-    private void Spring(Transform winningBlock)
+    private void Spring(Block winningBlock)
     {
         CreatePath();
 
         Path
-            .Wait(0.05f)
             .EasingLinear(_ADDITIONAL_TIME_DELAY, 0, 1, f =>
             {
                 foreach (var blockTransform in _blocksTransform)
@@ -82,11 +78,15 @@ public class PathStoppingBlock : MonoBehaviourExt
                         blockTransform.SetAsLastSibling();
                     }
                     
-                    blockTransform.localPosition = new Vector3(0f, blockTransform.localPosition.y + _movingSpeed * _SPRING_SPEED_OFFSET * Time.deltaTime);
+                    blockTransform.localPosition = new Vector3(0f, blockTransform.localPosition.y + MOVE_SPEED_BLOCKS * _SPRING_SPEED_OFFSET * Time.deltaTime);
                 }
                 
-                if (winningBlock.localPosition.y >= _midlePosition.y)
+                if (winningBlock.transform.localPosition.y >= _midlePosition.y)
                 {
+                    _gridLayoutGroup.enabled = false;
+                    _gridLayoutGroup.enabled = true;
+                    winningBlock.ActiveFrameEffect(true);
+                    Model.EventManager.Invoke(Keys.AllBlocksIsIdle);
                     Path = null;
                 }
             });
