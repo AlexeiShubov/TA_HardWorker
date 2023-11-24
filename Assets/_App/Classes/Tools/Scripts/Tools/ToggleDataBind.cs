@@ -39,9 +39,10 @@ public class ToggleDataBind : Binder
 	public void CustomAwake()
 	{
 		_toggle = GetComponent<Toggle>();
+		_toggle.interactable = defaultEnable;
 		
 		toggleName = string.IsNullOrEmpty(toggleName) ? name : toggleName;
-		enableField = enableField == "" ? $"OnToggle{toggleName}Enable" : enableField;
+		enableField = enableField == "" ? $"Toggle{toggleName}Enable" : enableField;
 
 		if (!respondToKeyboardButtonPress)
 		{
@@ -60,7 +61,7 @@ public class ToggleDataBind : Binder
 	[OnStart]
 	public void CustomStart()
 	{
-		Model.EventManager.AddAction($"OnToggle{enableField}Changed", OnItemEnable);
+		Model.EventManager.AddAction($"On{enableField}Changed", OnItemEnable);
 
 		if (keyField == "")
 		{
@@ -71,8 +72,6 @@ public class ToggleDataBind : Binder
 			key = Model.GetString(keyField, key);
 			Model.EventManager.AddAction($"OnToggle{keyField}Changed", OnKeyChanged);
 		}
-
-		OnItemEnable();
 	}
 
 	[OnUpdate]
@@ -109,7 +108,7 @@ public class ToggleDataBind : Binder
 			_eventTrigger.triggers.Clear();
 		}
 
-		Model.EventManager.RemoveAction($"OnToggle{enableField}Changed", OnItemEnable);
+		Model.EventManager.RemoveAction($"{enableField}Changed", OnItemEnable);
 		Model.EventManager.RemoveAction($"OnToggle{keyField}Changed", OnKeyChanged);
 	}
 
@@ -117,10 +116,11 @@ public class ToggleDataBind : Binder
 	{
 		key = Model.GetString(keyField);
 	}
-
+	
 	private void OnItemEnable()
 	{
-		_toggle.interactable = Model.GetBool(enableField, defaultEnable);
+		Debug.LogError(Model.GetBool($"On{enableField}Changed"));
+		_toggle.interactable = Model.GetBool($"On{enableField}Changed");
 	}
 
 	private void OnClickToggle(BaseEventData data)

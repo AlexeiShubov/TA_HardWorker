@@ -4,26 +4,26 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviourExtBind
 {
-    [Bind(ToggleNames.MusicToggleClick)]
+    [Bind(ToggleNames.OnToggleMusicClick)]
     private void ChangeMusicStatus()
     {
-        var status = Model.Get<bool>(ToggleNames.MusicToggleClick);
+        var status = Model.Get<bool>(ToggleNames.OnToggleMusicClick);
         
         Debug.LogError($"Music status: {status}");
     }
     
-    [Bind(ToggleNames.SoundToggleClick)]
+    [Bind(ToggleNames.OnToggleSoundClick)]
     private void ChangeSoundStatus()
     {
-        var status = Model.Get<bool>(ToggleNames.SoundToggleClick);
+        var status = Model.Get<bool>(ToggleNames.OnToggleSoundClick);
         
         Debug.LogError($"Sound status: {status}");
     }
     
-    [Bind(ToggleNames.VibrationToggleClick)]
+    [Bind(ToggleNames.OnToggleVibrationClick)]
     private void ChangeVibrationStatus()
     {
-        var status = Model.Get<bool>(ToggleNames.VibrationToggleClick);
+        var status = Model.Get<bool>(ToggleNames.OnToggleVibrationClick);
         
         Debug.LogError($"Vibration status: {status}");
     }
