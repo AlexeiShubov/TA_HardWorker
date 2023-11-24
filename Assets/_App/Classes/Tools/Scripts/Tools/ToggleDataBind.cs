@@ -119,8 +119,7 @@ public class ToggleDataBind : Binder
 	
 	private void OnItemEnable()
 	{
-		Debug.LogError(Model.GetBool($"On{enableField}Changed"));
-		_toggle.interactable = Model.GetBool($"On{enableField}Changed");
+		_toggle.interactable = Model.GetBool(enableField);
 	}
 
 	private void OnClickToggle(BaseEventData data)

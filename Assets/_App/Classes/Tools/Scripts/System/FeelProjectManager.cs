@@ -2,7 +2,7 @@ using AxGrid.Base;
 using AxGrid.Model;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviourExtBind
+public class FeelProjectManager : MonoBehaviourExtBind
 {
     [Bind(ToggleNames.OnToggleMusicClick)]
     private void ChangeMusicStatus()
