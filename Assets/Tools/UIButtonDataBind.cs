@@ -144,7 +144,8 @@ namespace AxGrid.Tools.Binders{
 			if (!button.interactable || key == "")
 				return;
 					
-			if (onKeyPress && !down && Input.GetKeyDown(key)) {
+			if (onKeyPress && !down && Input.GetKeyDown(key)) 
+			{
 				if (onKeyPress)
 					OnClick();
 
