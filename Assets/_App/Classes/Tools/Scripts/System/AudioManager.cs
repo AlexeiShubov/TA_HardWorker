@@ -7,7 +7,7 @@ public class AudioManager : MonoBehaviourExtBind
     [Bind(ToggleNames.OnToggleMusicClick)]
     private void ChangeMusicStatus()
     {
-        var status = Model.Get<bool>(ToggleNames.OnToggleMusicClick);
+        var status = Model.GetBool(ToggleNames.OnToggleMusicClick);
         
         Debug.LogError($"Music status: {status}");
     }
@@ -15,7 +15,7 @@ public class AudioManager : MonoBehaviourExtBind
     [Bind(ToggleNames.OnToggleSoundClick)]
     private void ChangeSoundStatus()
     {
-        var status = Model.Get<bool>(ToggleNames.OnToggleSoundClick);
+        var status = Model.GetBool(ToggleNames.OnToggleSoundClick);
         
         Debug.LogError($"Sound status: {status}");
     }
@@ -23,7 +23,7 @@ public class AudioManager : MonoBehaviourExtBind
     [Bind(ToggleNames.OnToggleVibrationClick)]
     private void ChangeVibrationStatus()
     {
-        var status = Model.Get<bool>(ToggleNames.OnToggleVibrationClick);
+        var status = Model.GetBool(ToggleNames.OnToggleVibrationClick);
         
         Debug.LogError($"Vibration status: {status}");
     }
