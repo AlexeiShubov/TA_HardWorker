@@ -12,8 +12,12 @@ public class InitializeToolsScene : MonoBehaviourExt
 
         Settings.Fsm.Add(new SettingsState());
         Settings.Fsm.Add(new GameState());
+    }
 
-        Settings.Fsm.Start(StateNames.SettingsState);
+    [OnStart]
+    private void CustomStart()
+    {
+        Settings.Fsm.Start(StateNames.GameState);
     }
 
     [OnUpdate]

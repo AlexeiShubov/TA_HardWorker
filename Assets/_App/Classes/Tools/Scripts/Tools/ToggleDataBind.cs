@@ -36,7 +36,7 @@ public class ToggleDataBind : Binder
 	public bool respondToKeyboardButtonPress;
 
 	[OnAwake]
-	public void CustomAwake()
+	private void CustomAwake()
 	{
 		_toggle = GetComponent<Toggle>();
 		_toggle.interactable = defaultEnable;
@@ -56,22 +56,21 @@ public class ToggleDataBind : Binder
 			_eventTrigger = gameObject.AddComponent<EventTrigger>();
 			_eventTrigger.triggers.Add(entry);
 		}
+		
+		Model.Set(ToggleNames.OnToggleMusicClick, _toggle.isOn);
+		Model.Set($"OnToggle{toggleName}Click", _toggle.isOn);
 	}
 
 	[OnStart]
-	public void CustomStart()
+	private void CustomStart()
 	{
-		Model.EventManager.AddAction($"On{enableField}Changed", OnItemEnable);
-
-		if (keyField == "")
-		{
-			keyField = $"{name}Key";
-		}
-		else
-		{
-			key = Model.GetString(keyField, key);
-			Model.EventManager.AddAction($"OnToggle{keyField}Changed", OnKeyChanged);
-		}
+		Subscribe();
+	}
+	
+	[OnDestroy]
+	public void CustomOnDestroy()
+	{
+		UnSubscribe();
 	}
 
 	[OnUpdate]
@@ -97,8 +96,22 @@ public class ToggleDataBind : Binder
 		_downTime = _down ? _downTime + Time.deltaTime : _downTime;
 	}
 
-	[OnDestroy]
-	public void CustomOnDestroy()
+	private void Subscribe()
+	{
+		Model.EventManager.AddAction($"On{enableField}Changed", OnItemEnable);
+
+		if (keyField == "")
+		{
+			keyField = $"{name}Key";
+		}
+		else
+		{
+			key = Model.GetString(keyField, key);
+			Model.EventManager.AddAction($"OnToggle{keyField}Changed", OnKeyChanged);
+		}
+	}
+
+	private void UnSubscribe()
 	{
 		_toggle.onValueChanged.RemoveAllListeners();
 

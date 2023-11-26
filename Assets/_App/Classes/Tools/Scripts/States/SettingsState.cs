@@ -12,8 +12,9 @@ public class SettingsState : AbstractState
         
         Model.Set(ButtonNames.OnBtnSettingsEnableChanged, false);
         Model.Set(ButtonNames.OnBtnGameEnableChanged, true);
+        Model.Set(ButtonNames.OnBtnCollectionContentChanged, false);
         
-        Debug.LogError($"Enter to {StateNames.SettingsState}");
+        Debug.Log($"Enter to {StateNames.SettingsState}");
     }
     
     [Bind(ToggleNames.OnToggle)]

@@ -1,30 +1,40 @@
+using System.Collections.Generic;
 using AxGrid.Base;
 using AxGrid.Model;
-using UnityEngine;
 
 public class FeelProjectManager : MonoBehaviourExtBind
 {
     [Bind(ToggleNames.OnToggleMusicClick)]
-    private void ChangeMusicStatus()
+    private void OnToggleMusicClick()
     {
-        var status = Model.GetBool(ToggleNames.OnToggleMusicClick);
-        
-        Debug.LogError($"Music status: {status}");
+        Model.EventManager.Invoke(
+            Model.GetBool(ToggleNames.OnToggleMusicClick) ? SoundNames.PlayMusic : SoundNames.StopMusic);
     }
     
-    [Bind(ToggleNames.OnToggleSoundClick)]
-    private void ChangeSoundStatus()
+    [Bind("SoundPlay")]
+    private void OnToggleSoundClick(string soundName)
     {
-        var status = Model.GetBool(ToggleNames.OnToggleSoundClick);
-        
-        Debug.LogError($"Sound status: {status}");
+        if (soundName == "Click" && Model.GetBool(ToggleNames.OnToggleSoundClick))
+        {
+            Model.EventManager.Invoke(SoundNames.PlayClick);
+        }
     }
     
-    [Bind(ToggleNames.OnToggleVibrationClick)]
-    private void ChangeVibrationStatus()
+    [Bind(ButtonNames.OnCollectionContentChanged)]
+    private void OnCollectionContentChanged()
     {
-        var status = Model.GetBool(ToggleNames.OnToggleVibrationClick);
-        
-        Debug.LogError($"Vibration status: {status}");
+        var collection = Model.Get<List<int>>(ButtonNames.CollectionContent);
+
+        var listValues = "";
+        var countIterations = collection.Count;
+
+        for (var i = 0; i < countIterations; i++)
+        {
+            var separator = i == 0 ? "" : ", ";
+
+            listValues = $"{listValues}{separator}{collection[i]}";
+        }
+
+        Model.Set(ButtonNames.OnCollectionContentClick, listValues);
     }
 }
