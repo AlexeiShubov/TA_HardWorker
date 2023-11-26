@@ -9,26 +9,16 @@ public class InitializeToolsScene : MonoBehaviourExt
     private void CustomAwake()
     {
         Settings.Fsm = new FSM();
-        
-        Settings.Fsm.Add(new TogglesReactionState());
-        Settings.Fsm.Add(new TogglesDisableReactionState());
-        
-        Settings.Fsm.Start(StateNames.ToggleReactionState);
+
+        Settings.Fsm.Add(new SettingsState());
+        Settings.Fsm.Add(new GameState());
+
+        Settings.Fsm.Start(StateNames.SettingsState);
     }
 
     [OnUpdate]
     private void CustomUpdate()
     {
         Settings.Fsm.Update(Time.deltaTime);
-        
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            var nextStateName 
-                = Settings.Fsm.CurrentStateName == StateNames.ToggleReactionState 
-                ? StateNames.ToggleDisableReactionState 
-                : StateNames.ToggleReactionState;
-            
-            Settings.Fsm.Change(nextStateName);
-        }
     }
 }

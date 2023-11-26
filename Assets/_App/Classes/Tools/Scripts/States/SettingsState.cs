@@ -2,17 +2,18 @@ using AxGrid.FSM;
 using AxGrid.Model;
 using UnityEngine;
 
-[State(StateNames.ToggleReactionState)]
-public class TogglesReactionState : FSMState
+[State(StateNames.SettingsState)]
+public class SettingsState : AbstractState
 {
     [Enter]
     private void Enter()
     {
-        Model.Set(ToggleNames.OnToggleMusicEnableChanged, true);
-        Model.Set(ToggleNames.OnToggleSoundEnableChanged, true);
-        Model.Set(ToggleNames.OnToggleVibrationEnableChanged, true);
+        EnableSettingsToggles(true);
         
-        Debug.LogError($"Enter to {StateNames.ToggleReactionState}");
+        Model.Set(ButtonNames.OnBtnSettingsEnableChanged, false);
+        Model.Set(ButtonNames.OnBtnGameEnableChanged, true);
+        
+        Debug.LogError($"Enter to {StateNames.SettingsState}");
     }
     
     [Bind(ToggleNames.OnToggle)]
@@ -28,6 +29,17 @@ public class TogglesReactionState : FSMState
                 break;
             case ToggleNames.VibrationToggle:
                 Model.Set(ToggleNames.OnToggleVibrationClick, !Model.GetBool(ToggleNames.OnToggleVibrationClick));
+                break;
+        }
+    }
+    
+    [Bind(ButtonNames.OnBtn)]
+    private void OnSomeButtonClick(string buttonName)
+    {
+        switch (buttonName)
+        {
+            case ButtonNames.Game:
+                Parent.Change(StateNames.GameState);
                 break;
         }
     }
