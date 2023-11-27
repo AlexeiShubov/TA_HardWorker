@@ -445,6 +445,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   globalModel: 0
+  _settingsPanel: {fileID: 2136250607}
 --- !u!1 &466640930
 GameObject:
   m_ObjectHideFlags: 0
@@ -491,10 +492,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   globalModel: 0
-  _audioClip: {fileID: 8300000, guid: 402fc394467a6304db28607d64428c6b, type: 3}
-  _playOnAwake: 1
-  _loop: 1
-  _volume: 0.5
   _fieldName: Music
 --- !u!82 &466640933
 AudioSource:
@@ -506,11 +503,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 402fc394467a6304db28607d64428c6b, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -779,7 +776,7 @@ PrefabInstance:
     - target: {fileID: 6572411088576973877, guid: b140d80a730fc7b4f974f8965615d2f8,
         type: 3}
       propertyPath: m_Interactable
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6680486573316310168, guid: b140d80a730fc7b4f974f8965615d2f8,
         type: 3}
@@ -986,7 +983,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -477.97998, y: -63.799927}
+  m_AnchoredPosition: {x: -477.98, y: -63.799927}
   m_SizeDelta: {x: 955.96, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &813278113
@@ -1384,10 +1381,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   globalModel: 0
-  _audioClip: {fileID: 8300000, guid: 05d3185b4dd21444eaa493e1611c56b3, type: 3}
-  _playOnAwake: 0
-  _loop: 0
-  _volume: 0.5
   _fieldName: Click
 --- !u!82 &1297612117
 AudioSource:
@@ -1399,9 +1392,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
+  m_audioClip: {fileID: 8300000, guid: 05d3185b4dd21444eaa493e1611c56b3, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1507,7 +1500,7 @@ MonoBehaviour:
   delayUntilTimerReset: 2
   toggleName: Sound
   enableField: 
-  defaultEnable: 0
+  defaultEnable: 1
   keyField: 
   key: 
   respondToKeyboardButtonPress: 0
@@ -2095,7 +2088,7 @@ PrefabInstance:
     - target: {fileID: 6572411088576973877, guid: b140d80a730fc7b4f974f8965615d2f8,
         type: 3}
       propertyPath: m_Interactable
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6680486573316310168, guid: b140d80a730fc7b4f974f8965615d2f8,
         type: 3}
@@ -2316,7 +2309,7 @@ MonoBehaviour:
   delayUntilTimerReset: 2
   toggleName: Vibration
   enableField: 
-  defaultEnable: 0
+  defaultEnable: 1
   keyField: 
   key: 
   respondToKeyboardButtonPress: 0
@@ -2374,7 +2367,7 @@ MonoBehaviour:
   delayUntilTimerReset: 2
   toggleName: Music
   enableField: 
-  defaultEnable: 0
+  defaultEnable: 1
   keyField: 
   key: 
   respondToKeyboardButtonPress: 0
@@ -2511,7 +2504,7 @@ PrefabInstance:
     - target: {fileID: 6572411088576973877, guid: b140d80a730fc7b4f974f8965615d2f8,
         type: 3}
       propertyPath: m_Interactable
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6680486573316310168, guid: b140d80a730fc7b4f974f8965615d2f8,
         type: 3}

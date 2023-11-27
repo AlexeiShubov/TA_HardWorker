@@ -1,5 +1,6 @@
 using AxGrid;
 using AxGrid.Base;
+using AxGrid.Model;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -56,9 +57,6 @@ public class ToggleDataBind : Binder
 			_eventTrigger = gameObject.AddComponent<EventTrigger>();
 			_eventTrigger.triggers.Add(entry);
 		}
-		
-		Model.Set(ToggleNames.OnToggleMusicClick, _toggle.isOn);
-		Model.Set($"OnToggle{toggleName}Click", _toggle.isOn);
 	}
 
 	[OnStart]
@@ -98,7 +96,7 @@ public class ToggleDataBind : Binder
 
 	private void Subscribe()
 	{
-		Model.EventManager.AddAction($"On{enableField}Changed", OnItemEnable);
+		Model.EventManager.AddAction($"On{enableField}Changed", OnEnableFieldChanged);
 
 		if (keyField == "")
 		{
@@ -121,16 +119,17 @@ public class ToggleDataBind : Binder
 			_eventTrigger.triggers.Clear();
 		}
 
-		Model.EventManager.RemoveAction($"{enableField}Changed", OnItemEnable);
+		Model.EventManager.RemoveAction($"{enableField}Changed", OnEnableFieldChanged);
 		Model.EventManager.RemoveAction($"OnToggle{keyField}Changed", OnKeyChanged);
 	}
 
+	[Bind]
 	private void OnKeyChanged()
 	{
 		key = Model.GetString(keyField);
 	}
 	
-	private void OnItemEnable()
+	private void OnEnableFieldChanged()
 	{
 		_toggle.interactable = Model.GetBool(enableField);
 	}

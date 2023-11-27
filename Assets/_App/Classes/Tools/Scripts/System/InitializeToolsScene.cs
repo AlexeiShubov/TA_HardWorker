@@ -9,7 +9,8 @@ public class InitializeToolsScene : MonoBehaviourExt
     private void CustomAwake()
     {
         Settings.Fsm = new FSM();
-
+        
+        Settings.Fsm.Add(new InitializeState());
         Settings.Fsm.Add(new SettingsState());
         Settings.Fsm.Add(new GameState());
     }
@@ -17,7 +18,7 @@ public class InitializeToolsScene : MonoBehaviourExt
     [OnStart]
     private void CustomStart()
     {
-        Settings.Fsm.Start(StateNames.GameState);
+        Settings.Fsm.Start(StateNames.InitializeState);
     }
 
     [OnUpdate]

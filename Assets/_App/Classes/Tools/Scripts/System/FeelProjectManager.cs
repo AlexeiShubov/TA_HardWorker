@@ -1,18 +1,21 @@
 using System.Collections.Generic;
 using AxGrid.Base;
 using AxGrid.Model;
+using UnityEngine;
 
 public class FeelProjectManager : MonoBehaviourExtBind
 {
-    [Bind(ToggleNames.OnToggleMusicClick)]
+    [SerializeField] private GameObject _settingsPanel;
+    
+    [Bind]
     private void OnToggleMusicClick()
     {
         Model.EventManager.Invoke(
             Model.GetBool(ToggleNames.OnToggleMusicClick) ? SoundNames.PlayMusic : SoundNames.StopMusic);
     }
     
-    [Bind("SoundPlay")]
-    private void OnToggleSoundClick(string soundName)
+    [Bind]
+    private void SoundPlay(string soundName)
     {
         if (soundName == "Click" && Model.GetBool(ToggleNames.OnToggleSoundClick))
         {
@@ -20,21 +23,15 @@ public class FeelProjectManager : MonoBehaviourExtBind
         }
     }
     
-    [Bind(ButtonNames.OnCollectionContentChanged)]
+    [Bind]
     private void OnCollectionContentChanged()
     {
-        var collection = Model.Get<List<int>>(ButtonNames.CollectionContent);
+        Model.Set(ButtonNames.OnCollectionContentClick, string.Join(", ", Model.Get<List<int>>(ButtonNames.CollectionContent)));
+    }
 
-        var listValues = "";
-        var countIterations = collection.Count;
-
-        for (var i = 0; i < countIterations; i++)
-        {
-            var separator = i == 0 ? "" : ", ";
-
-            listValues = $"{listValues}{separator}{collection[i]}";
-        }
-
-        Model.Set(ButtonNames.OnCollectionContentClick, listValues);
+    [Bind]
+    private void OnSettingsPanelActiveChanged(bool status)
+    {
+        _settingsPanel.SetActive(status);
     }
 }

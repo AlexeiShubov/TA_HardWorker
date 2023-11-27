@@ -4,7 +4,7 @@ using AxGrid.Model;
 using UnityEngine;
 
 [State(StateNames.GameState)]
-public class GameState : AbstractState
+public class GameState : FSMState
 {
     private const int _MIN_VALUE_FOR_RANDOM_RANGE = 1;
     private const int _MAX_VALUE_FOR_RANDOM_RANGE = 10;
@@ -14,17 +14,15 @@ public class GameState : AbstractState
     [Enter]
     private void Enter()
     {
-        EnableSettingsToggles(false);
-
-        Model.Set(ButtonNames.OnBtnGameEnableChanged, false);
-        Model.Set(ButtonNames.OnBtnSettingsEnableChanged, true);
-        Model.Set(ButtonNames.OnBtnCollectionContentChanged, true);
+        Model.EventManager.Invoke(ProjectEvents.OnSettingsPanelActiveChanged, false);
         
-        Debug.Log($"Enter to {StateNames.GameState}");
+        Model.Set(ButtonNames.BtnGameEnable, false);
+        Model.Set(ButtonNames.BtnSettingsEnable, true);
+        Model.Set(ButtonNames.BtnCollectionContentEnable, true);
     }
 
-    [Bind(ButtonNames.OnBtn)]
-    private void OnSomeButtonClick(string buttonName)
+    [Bind]
+    private void OnBtn(string buttonName)
     {
         switch (buttonName)
         {

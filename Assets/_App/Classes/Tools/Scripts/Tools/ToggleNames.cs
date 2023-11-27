@@ -1,16 +1,10 @@
 public static class ToggleNames
 {
-    public const string OnToggle = "OnToggle";
-    
-    public const string MusicToggle = "Music";
-    public const string SoundToggle = "Sound";
-    public const string VibrationToggle = "Vibration";
+    public const string Music = "Music";
+    public const string Sound = "Sound";
+    public const string Vibration = "Vibration";
     
     public const string OnToggleMusicClick = "OnToggleMusicClick";
     public const string OnToggleSoundClick = "OnToggleSoundClick";
-    public const string OnToggleVibrationClick = "OnToggleVibrationClick";    
-    
-    public const string OnToggleMusicEnableChanged = "ToggleMusicEnable";
-    public const string OnToggleSoundEnableChanged = "ToggleSoundEnable";
-    public const string OnToggleVibrationEnableChanged = "ToggleVibrationEnable";
+    public const string OnToggleVibrationClick = "OnToggleVibrationClick";
 }

@@ -7,9 +7,9 @@ public static class ButtonNames
     public const string CollectionContent = "CollectionContent";
 
     public const string OnCollectionContentChanged = "OnCollectionContentChanged";
-    public const string OnCollectionContentClick= "OnCollectionContentClick";
+    public const string OnCollectionContentClick = "OnCollectionContentClick";
     
-    public const string OnBtnGameEnableChanged = "BtnGameEnable";
-    public const string OnBtnSettingsEnableChanged = "BtnSettingsEnable";
-    public const string OnBtnCollectionContentChanged = "BtnCollectionContentEnable";
+    public const string BtnGameEnable = "BtnGameEnable";
+    public const string BtnSettingsEnable = "BtnSettingsEnable";
+    public const string BtnCollectionContentEnable = "BtnCollectionContentEnable";
 }

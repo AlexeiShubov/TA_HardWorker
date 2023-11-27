@@ -1,41 +1,38 @@
 using AxGrid.FSM;
 using AxGrid.Model;
-using UnityEngine;
 
 [State(StateNames.SettingsState)]
-public class SettingsState : AbstractState
+public class SettingsState : FSMState
 {
     [Enter]
     private void Enter()
     {
-        EnableSettingsToggles(true);
+        Model.EventManager.Invoke(ProjectEvents.OnSettingsPanelActiveChanged, true);
         
-        Model.Set(ButtonNames.OnBtnSettingsEnableChanged, false);
-        Model.Set(ButtonNames.OnBtnGameEnableChanged, true);
-        Model.Set(ButtonNames.OnBtnCollectionContentChanged, false);
-        
-        Debug.Log($"Enter to {StateNames.SettingsState}");
+        Model.Set(ButtonNames.BtnSettingsEnable, false);
+        Model.Set(ButtonNames.BtnGameEnable, true);
+        Model.Set(ButtonNames.BtnCollectionContentEnable, false);
     }
-    
-    [Bind(ToggleNames.OnToggle)]
+
+    [Bind]
     private void OnToggle(string toggleName)
     {
         switch (toggleName)
         {
-            case ToggleNames.MusicToggle:
+            case ToggleNames.Music:
                 Model.Set(ToggleNames.OnToggleMusicClick, !Model.GetBool(ToggleNames.OnToggleMusicClick));
                 break;
-            case ToggleNames.SoundToggle:
+            case ToggleNames.Sound:
                 Model.Set(ToggleNames.OnToggleSoundClick, !Model.GetBool(ToggleNames.OnToggleSoundClick));
                 break;
-            case ToggleNames.VibrationToggle:
+            case ToggleNames.Vibration:
                 Model.Set(ToggleNames.OnToggleVibrationClick, !Model.GetBool(ToggleNames.OnToggleVibrationClick));
                 break;
         }
     }
     
-    [Bind(ButtonNames.OnBtn)]
-    private void OnSomeButtonClick(string buttonName)
+    [Bind]
+    private void OnBtn(string buttonName)
     {
         switch (buttonName)
         {
