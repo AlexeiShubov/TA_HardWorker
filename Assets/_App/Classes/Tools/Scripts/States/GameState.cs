@@ -7,9 +7,9 @@ using UnityEngine;
 public class GameState : FSMState
 {
     private const int _MIN_VALUE_FOR_RANDOM_RANGE = 1;
-    private const int _MAX_VALUE_FOR_RANDOM_RANGE = 10;
+    private const int _MAX_VALUE_FOR_RANDOM_RANGE = 25;
 
-    private readonly List<int> _collection = new List<int>();
+    private readonly List<CollectionData> _collection = new List<CollectionData>();
     
     [Enter]
     private void Enter()
@@ -38,7 +38,7 @@ public class GameState : FSMState
     private void ChangeCollectionContent()
     {
         ChangeCollection();
-        
+
         if (!Model.ContainsKey(ButtonNames.CollectionContent))
         {
             Model.Set(ButtonNames.CollectionContent, _collection);
@@ -51,13 +51,13 @@ public class GameState : FSMState
 
     private void ChangeCollection()
     {
-        var randomValue = GetRandomValue();
+        var countIterations = GetRandomValue();
         
         _collection.Clear();
-        
-        for (var i = 0; i < randomValue; i++)
+
+        for (var i = 0; i < countIterations; i++)
         {
-            _collection.Add(GetRandomValue());
+            _collection.Add(new CollectionData($"{Random.value:F2}"));
         }
     }
 

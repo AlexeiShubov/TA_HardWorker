@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using AxGrid.Base;
 using AxGrid.Model;
 using UnityEngine;
@@ -26,7 +25,7 @@ public class FeelProjectManager : MonoBehaviourExtBind
     [Bind]
     private void OnCollectionContentChanged()
     {
-        Model.Set(ButtonNames.OnCollectionContentClick, string.Join(", ", Model.Get<List<int>>(ButtonNames.CollectionContent)));
+        //Model.Set(ButtonNames.OnCollectionContentClick, string.Join(", ", Model.Get<List<int>>(ButtonNames.CollectionContent)));
     }
 
     [Bind]
