@@ -11,7 +11,6 @@ public class ToggleDataBind : Binder, IPointerDownHandler
 	private bool _down;
 	private float _downTime;
 	private Toggle _toggle;
-	private EventTrigger _eventTrigger;
 
 	/// <summary>
 	/// Имя тугла (если пустое берется из имени объекта)
@@ -99,12 +98,6 @@ public class ToggleDataBind : Binder, IPointerDownHandler
 	private void UnSubscribe()
 	{
 		_toggle.onValueChanged.RemoveAllListeners();
-
-		if (_eventTrigger != null)
-		{
-			_eventTrigger.triggers.ForEach(t => t.callback.RemoveAllListeners());
-			_eventTrigger.triggers.Clear();
-		}
 
 		Model.EventManager.RemoveAction($"{enableField}Changed", OnEnableFieldChanged);
 		Model.EventManager.RemoveAction($"OnToggle{keyField}Changed", OnKeyChanged);
