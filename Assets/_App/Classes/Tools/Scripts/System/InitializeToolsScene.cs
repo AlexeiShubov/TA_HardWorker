@@ -3,27 +3,30 @@ using AxGrid.Base;
 using AxGrid.FSM;
 using UnityEngine;
 
-public class InitializeToolsScene : MonoBehaviourExt
+namespace ClassesTools
 {
-    [OnAwake]
-    private void CustomAwake()
+    public class InitializeToolsScene : MonoBehaviourExt
     {
-        Settings.Fsm = new FSM();
-        
-        Settings.Fsm.Add(new InitializeState());
-        Settings.Fsm.Add(new SettingsState());
-        Settings.Fsm.Add(new GameState());
-    }
+        [OnAwake]
+        private void CustomAwake()
+        {
+            Settings.Fsm = new FSM();
 
-    [OnStart]
-    private void CustomStart()
-    {
-        Settings.Fsm.Start(StateNames.InitializeState);
-    }
+            Settings.Fsm.Add(new InitializeState());
+            Settings.Fsm.Add(new SettingsState());
+            Settings.Fsm.Add(new GameState());
+        }
 
-    [OnUpdate]
-    private void CustomUpdate()
-    {
-        Settings.Fsm.Update(Time.deltaTime);
+        [OnStart]
+        private void CustomStart()
+        {
+            Settings.Fsm.Start(StateNames.InitializeState);
+        }
+
+        [OnUpdate]
+        private void CustomUpdate()
+        {
+            Settings.Fsm.Update(Time.deltaTime);
+        }
     }
 }

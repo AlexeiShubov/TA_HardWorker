@@ -5,134 +5,138 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Toggle))]
-public class ToggleDataBind : Binder, IPointerDownHandler
+namespace ClassesTools
 {
-	private bool _down;
-	private float _downTime;
-	private Toggle _toggle;
-
-	/// <summary>
-	/// Имя тугла (если пустое берется из имени объекта)
-	/// </summary>
-	public float delayUntilTimerReset = 2f;
-	public string toggleName = "";
-	public string enableField = "";
-	public bool defaultEnable = true;
-
-	/// <summary>
-	/// Поле из модели где взять настройку клавиатуры
-	/// </summary>
-	public string keyField = "";
-
-	/// <summary>
-	/// Кнопка клавиатуры (заполнится из модели если там есть)
-	/// </summary>
-	public string key = "";
-
-	/// <summary>
-	/// Срабатывать на нажатие клавиши на клавиатуре
-	/// </summary>
-	public bool respondToKeyboardButtonPress;
-
-	[OnAwake]
-	private void CustomAwake()
+	[RequireComponent(typeof(Toggle))]
+	public class ToggleDataBind : Binder, IPointerDownHandler
 	{
-		_toggle = GetComponent<Toggle>();
-		_toggle.interactable = defaultEnable;
-		
-		toggleName = string.IsNullOrEmpty(toggleName) ? name : toggleName;
-		enableField = enableField == "" ? $"Toggle{toggleName}Enable" : enableField;
-	}
+		private bool _down;
+		private float _downTime;
+		private Toggle _toggle;
 
-	[OnStart]
-	private void CustomStart()
-	{
-		Subscribe();
-	}
-	
-	[OnDestroy]
-	public void CustomOnDestroy()
-	{
-		UnSubscribe();
-	}
+		/// <summary>
+		/// Имя тугла (если пустое берется из имени объекта)
+		/// </summary>
+		public float delayUntilTimerReset = 2f;
 
-	[OnUpdate]
-	private void CustomUpdate()
-	{
-		if (!_toggle.interactable || key == "" || !respondToKeyboardButtonPress)
+		public string toggleName = "";
+		public string enableField = "";
+		public bool defaultEnable = true;
+
+		/// <summary>
+		/// Поле из модели где взять настройку клавиатуры
+		/// </summary>
+		public string keyField = "";
+
+		/// <summary>
+		/// Кнопка клавиатуры (заполнится из модели если там есть)
+		/// </summary>
+		public string key = "";
+
+		/// <summary>
+		/// Срабатывать на нажатие клавиши на клавиатуре
+		/// </summary>
+		public bool respondToKeyboardButtonPress;
+
+		[OnAwake]
+		private void CustomAwake()
 		{
-			return;
+			_toggle = GetComponent<Toggle>();
+			_toggle.interactable = defaultEnable;
+
+			toggleName = string.IsNullOrEmpty(toggleName) ? name : toggleName;
+			enableField = enableField == "" ? $"Toggle{toggleName}Enable" : enableField;
 		}
 
-		if (Input.GetKeyDown(key))
+		[OnStart]
+		private void CustomStart()
 		{
-			_downTime = 0;
-			_down = true;
-
-			OnClickToggle();
-		}
-		else if (Input.GetKeyUp(key) || _downTime >= delayUntilTimerReset)
-		{
-			_down = false;
+			Subscribe();
 		}
 
-		_downTime = _down ? _downTime + Time.deltaTime : _downTime;
-	}
-
-	private void Subscribe()
-	{
-		Model.EventManager.AddAction($"On{enableField}Changed", OnEnableFieldChanged);
-
-		if (keyField == "")
+		[OnDestroy]
+		public void CustomOnDestroy()
 		{
-			keyField = $"{name}Key";
-		}
-		else
-		{
-			key = Model.GetString(keyField, key);
-			Model.EventManager.AddAction($"OnToggle{keyField}Changed", OnKeyChanged);
-		}
-	}
-
-	private void UnSubscribe()
-	{
-		_toggle.onValueChanged.RemoveAllListeners();
-
-		Model.EventManager.RemoveAction($"{enableField}Changed", OnEnableFieldChanged);
-		Model.EventManager.RemoveAction($"OnToggle{keyField}Changed", OnKeyChanged);
-	}
-
-	[Bind]
-	private void OnKeyChanged()
-	{
-		key = Model.GetString(keyField);
-	}
-	
-	private void OnEnableFieldChanged()
-	{
-		_toggle.interactable = Model.GetBool(enableField);
-	}
-
-	private void OnClickToggle()
-	{
-		if (!_toggle.interactable || !isActiveAndEnabled)
-		{
-			return;
+			UnSubscribe();
 		}
 
-		Model?.EventManager.Invoke("SoundPlay", "Click");
-
-		Settings.Fsm?.Invoke("OnToggle", toggleName);
-
-		Model?.EventManager.Invoke($"OnToggle{toggleName}Click");
-	}
-
-	public void OnPointerDown(PointerEventData eventData)
-	{
-		if (!respondToKeyboardButtonPress)
+		[OnUpdate]
+		private void CustomUpdate()
 		{
-			OnClickToggle();
+			if (!_toggle.interactable || key == "" || !respondToKeyboardButtonPress)
+			{
+				return;
+			}
+
+			if (Input.GetKeyDown(key))
+			{
+				_downTime = 0;
+				_down = true;
+
+				OnClickToggle();
+			}
+			else if (Input.GetKeyUp(key) || _downTime >= delayUntilTimerReset)
+			{
+				_down = false;
+			}
+
+			_downTime = _down ? _downTime + Time.deltaTime : _downTime;
+		}
+
+		private void Subscribe()
+		{
+			Model.EventManager.AddAction($"On{enableField}Changed", OnEnableFieldChanged);
+
+			if (keyField == "")
+			{
+				keyField = $"{name}Key";
+			}
+			else
+			{
+				key = Model.GetString(keyField, key);
+				Model.EventManager.AddAction($"OnToggle{keyField}Changed", OnKeyChanged);
+			}
+		}
+
+		private void UnSubscribe()
+		{
+			_toggle.onValueChanged.RemoveAllListeners();
+
+			Model.EventManager.RemoveAction($"{enableField}Changed", OnEnableFieldChanged);
+			Model.EventManager.RemoveAction($"OnToggle{keyField}Changed", OnKeyChanged);
+		}
+
+		[Bind]
+		private void OnKeyChanged()
+		{
+			key = Model.GetString(keyField);
+		}
+
+		private void OnEnableFieldChanged()
+		{
+			_toggle.interactable = Model.GetBool(enableField);
+		}
+
+		private void OnClickToggle()
+		{
+			if (!_toggle.interactable || !isActiveAndEnabled)
+			{
+				return;
+			}
+
+			Model?.EventManager.Invoke("SoundPlay", "Click");
+
+			Settings.Fsm?.Invoke("OnToggle", toggleName);
+
+			Model?.EventManager.Invoke($"OnToggle{toggleName}Click");
+		}
+
+		public void OnPointerDown(PointerEventData eventData)
+		{
+			if (!respondToKeyboardButtonPress)
+			{
+				OnClickToggle();
+			}
 		}
 	}
 }

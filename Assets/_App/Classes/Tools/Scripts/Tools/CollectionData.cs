@@ -1,9 +1,12 @@
-public class CollectionData
+namespace ClassesTools
 {
-    public readonly string info;
-
-    public CollectionData(string info)
+    public class CollectionData
     {
-        this.info = info;
+        public readonly string info;
+
+        public CollectionData(string info)
+        {
+            this.info = info;
+        }
     }
 }

@@ -3,66 +3,69 @@ using AxGrid.FSM;
 using AxGrid.Model;
 using UnityEngine;
 
-[State(StateNames.GameState)]
-public class GameState : FSMState
+namespace ClassesTools
 {
-    private const int _MIN_VALUE_FOR_RANDOM_RANGE = 1;
-    private const int _MAX_VALUE_FOR_RANDOM_RANGE = 25;
-
-    private readonly List<CollectionData> _collection = new List<CollectionData>();
-    
-    [Enter]
-    private void Enter()
+    [State(StateNames.GameState)]
+    public class GameState : FSMState
     {
-        Model.EventManager.Invoke(ProjectEvents.OnSettingsPanelActiveChanged, false);
-        
-        Model.Set(ButtonNames.BtnGameEnable, false);
-        Model.Set(ButtonNames.BtnSettingsEnable, true);
-        Model.Set(ButtonNames.BtnCollectionContentEnable, true);
-    }
+        private const int _MIN_VALUE_FOR_RANDOM_RANGE = 1;
+        private const int _MAX_VALUE_FOR_RANDOM_RANGE = 25;
 
-    [Bind]
-    private void OnBtn(string buttonName)
-    {
-        switch (buttonName)
+        private readonly List<CollectionData> _collection = new List<CollectionData>();
+
+        [Enter]
+        private void Enter()
         {
-            case ButtonNames.Settings:
-                Parent.Change(StateNames.SettingsState);
-                break;
-            case ButtonNames.CollectionContent:
-                ChangeCollectionContent();
-                break;
+            Model.EventManager.Invoke(ProjectEvents.OnSettingsPanelActiveChanged, false);
+
+            Model.Set(ButtonNames.BtnGameEnable, false);
+            Model.Set(ButtonNames.BtnSettingsEnable, true);
+            Model.Set(ButtonNames.BtnCollectionContentEnable, true);
         }
-    }
 
-    private void ChangeCollectionContent()
-    {
-        ChangeCollection();
-
-        if (!Model.ContainsKey(ButtonNames.CollectionContent))
+        [Bind]
+        private void OnBtn(string buttonName)
         {
-            Model.Set(ButtonNames.CollectionContent, _collection);
+            switch (buttonName)
+            {
+                case ButtonNames.Settings:
+                    Parent.Change(StateNames.SettingsState);
+                    break;
+                case ButtonNames.CollectionContent:
+                    ChangeCollectionContent();
+                    break;
+            }
         }
-        else
+
+        private void ChangeCollectionContent()
         {
-            Model.Set(ButtonNames.CollectionContent, _collection).Refresh(ButtonNames.CollectionContent);
+            ChangeCollection();
+
+            if (!Model.ContainsKey(ButtonNames.CollectionContent))
+            {
+                Model.Set(ButtonNames.CollectionContent, _collection);
+            }
+            else
+            {
+                Model.Set(ButtonNames.CollectionContent, _collection).Refresh(ButtonNames.CollectionContent);
+            }
         }
-    }
 
-    private void ChangeCollection()
-    {
-        var countIterations = GetRandomValue();
-        
-        _collection.Clear();
-
-        for (var i = 0; i < countIterations; i++)
+        private void ChangeCollection()
         {
-            _collection.Add(new CollectionData($"{Random.value:F2}"));
-        }
-    }
+            var countIterations = GetRandomValue();
 
-    private int GetRandomValue()
-    {
-        return Random.Range(_MIN_VALUE_FOR_RANDOM_RANGE, _MAX_VALUE_FOR_RANDOM_RANGE);
+            _collection.Clear();
+
+            for (var i = 0; i < countIterations; i++)
+            {
+                _collection.Add(new CollectionData($"{Random.value:F2}"));
+            }
+        }
+
+        private int GetRandomValue()
+        {
+            return Random.Range(_MIN_VALUE_FOR_RANDOM_RANGE, _MAX_VALUE_FOR_RANDOM_RANGE);
+        }
     }
 }

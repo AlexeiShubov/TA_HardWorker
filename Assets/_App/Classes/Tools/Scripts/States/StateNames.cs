@@ -1,6 +1,9 @@
-public static class StateNames
+namespace ClassesTools
 {
-    public const string InitializeState = "InitializeState";
-    public const string SettingsState = "SettingsState";
-    public const string GameState = "GameState";
+    public static class StateNames
+    {
+        public const string InitializeState = "InitializeState";
+        public const string SettingsState = "SettingsState";
+        public const string GameState = "GameState";
+    }
 }

@@ -1,55 +1,57 @@
 using System.Collections.Generic;
-using System.Linq;
 using AxGrid.Base;
 using STIGRADOR;
 using UnityEngine;
 
-public class DynamicCollection : MonoBehaviourExtBind
+namespace ClassesTools
 {
-    [SerializeField] private string _collectionName;
-    [SerializeField] private CollectionObject _collectionObjectPrefab;
-    [SerializeField] private Transform _parent;
-
-    private ObjectPool<CollectionObject> _pool;
-    private PoolMonoFactory<CollectionObject> _factory;
-    private List<CollectionObject> _activeCollectionPrefabs;
-
-    [OnAwake]
-    private void CustomAwake()
+    public class DynamicCollection : MonoBehaviourExtBind
     {
-        _factory = new PoolMonoFactory<CollectionObject>(_collectionObjectPrefab, _parent);
-        _pool = new BaseMonoPool<CollectionObject>(_factory);
-        _activeCollectionPrefabs = new List<CollectionObject>();
-    }
+        [SerializeField] private string _collectionName;
+        [SerializeField] private CollectionObject _collectionObjectPrefab;
+        [SerializeField] private Transform _parent;
 
-    [OnStart]
-    private void CustomStart()
-    {
-        if (string.IsNullOrEmpty(_collectionName))
+        private ObjectPool<CollectionObject> _pool;
+        private PoolMonoFactory<CollectionObject> _factory;
+        private List<CollectionObject> _activeCollectionPrefabs;
+
+        [OnAwake]
+        private void CustomAwake()
         {
-            _collectionName = "CollectionContent";
+            _factory = new PoolMonoFactory<CollectionObject>(_collectionObjectPrefab, _parent);
+            _pool = new BaseMonoPool<CollectionObject>(_factory);
+            _activeCollectionPrefabs = new List<CollectionObject>();
         }
 
-        Model.EventManager.AddAction<List<CollectionData>>($"On{_collectionName}Changed", OnCollectionChanged);
-    }
-    
-    private void OnCollectionChanged(List<CollectionData> collection)
-    {
-        var countIterations = collection.Count;
-
-        foreach (var collectionObject in _activeCollectionPrefabs)
+        [OnStart]
+        private void CustomStart()
         {
-            collectionObject.Return();
+            if (string.IsNullOrEmpty(_collectionName))
+            {
+                _collectionName = "CollectionContent";
+            }
+
+            Model.EventManager.AddAction<List<CollectionData>>($"On{_collectionName}Changed", OnCollectionChanged);
         }
-        
-        _activeCollectionPrefabs.Clear();
 
-        for (var i = 0; i < countIterations; i++)
+        private void OnCollectionChanged(List<CollectionData> collection)
         {
-            var newObject = (CollectionObject)_pool.GetObject();
+            var countIterations = collection.Count;
 
-            newObject.Init(collection[i]);
-            _activeCollectionPrefabs.Add(newObject);
+            foreach (var collectionObject in _activeCollectionPrefabs)
+            {
+                collectionObject.Return();
+            }
+
+            _activeCollectionPrefabs.Clear();
+
+            for (var i = 0; i < countIterations; i++)
+            {
+                var newObject = (CollectionObject) _pool.GetObject();
+
+                newObject.Init(collection[i]);
+                _activeCollectionPrefabs.Add(newObject);
+            }
         }
     }
 }

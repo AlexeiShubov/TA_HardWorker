@@ -1,4 +1,7 @@
-public static class ProjectEvents
+namespace ClassesTools
 {
-    public const string OnSettingsPanelActiveChanged = "OnSettingsPanelActiveChanged";
+    public static class ProjectEvents
+    {
+        public const string OnSettingsPanelActiveChanged = "OnSettingsPanelActiveChanged";
+    }
 }

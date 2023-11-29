@@ -1,17 +1,20 @@
 using AxGrid.FSM;
 
-[State(StateNames.InitializeState)]
-public class InitializeState : FSMState
+namespace ClassesTools
 {
-    [Enter]
-    private void Enter()
+    [State(StateNames.InitializeState)]
+    public class InitializeState : FSMState
     {
-        Model.Set(ProjectEvents.OnSettingsPanelActiveChanged, false);
-        
-        Model.Set(ToggleNames.OnToggleMusicClick, true);
-        Model.Set(ToggleNames.OnToggleSoundClick, true);
-        Model.Set(ToggleNames.OnToggleVibrationClick, true);
-        
-        Parent.Change(StateNames.GameState);
+        [Enter]
+        private void Enter()
+        {
+            Model.Set(ProjectEvents.OnSettingsPanelActiveChanged, false);
+
+            Model.Set(ToggleNames.OnToggleMusicClick, true);
+            Model.Set(ToggleNames.OnToggleSoundClick, true);
+            Model.Set(ToggleNames.OnToggleVibrationClick, true);
+
+            Parent.Change(StateNames.GameState);
+        }
     }
 }
