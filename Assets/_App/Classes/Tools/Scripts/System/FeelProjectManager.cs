@@ -25,12 +25,6 @@ namespace ClassesTools
         }
 
         [Bind]
-        private void OnCollectionContentChanged()
-        {
-            //Model.Set(ButtonNames.OnCollectionContentClick, string.Join(", ", Model.Get<List<int>>(ButtonNames.CollectionContent)));
-        }
-
-        [Bind]
         private void OnSettingsPanelActiveChanged(bool status)
         {
             _settingsPanel.SetActive(status);
