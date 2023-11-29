@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Toggle))]
-public class ToggleDataBind : Binder
+public class ToggleDataBind : Binder, IPointerDownHandler
 {
 	private bool _down;
 	private float _downTime;
@@ -44,19 +44,6 @@ public class ToggleDataBind : Binder
 		
 		toggleName = string.IsNullOrEmpty(toggleName) ? name : toggleName;
 		enableField = enableField == "" ? $"Toggle{toggleName}Enable" : enableField;
-
-		if (!respondToKeyboardButtonPress)
-		{
-			_toggle.onValueChanged.AddListener(OnClickToggle);
-		}
-		else
-		{
-			var entry = new EventTrigger.Entry {eventID = EventTriggerType.PointerDown};
-			
-			entry.callback.AddListener(OnClickToggle);
-			_eventTrigger = gameObject.AddComponent<EventTrigger>();
-			_eventTrigger.triggers.Add(entry);
-		}
 	}
 
 	[OnStart]
@@ -84,7 +71,7 @@ public class ToggleDataBind : Binder
 			_downTime = 0;
 			_down = true;
 
-			OnClickToggle(true);
+			OnClickToggle();
 		}
 		else if (Input.GetKeyUp(key) || _downTime >= delayUntilTimerReset)
 		{
@@ -134,12 +121,7 @@ public class ToggleDataBind : Binder
 		_toggle.interactable = Model.GetBool(enableField);
 	}
 
-	private void OnClickToggle(BaseEventData data)
-	{
-		OnClickToggle(true);
-	}
-
-	private void OnClickToggle(bool status)
+	private void OnClickToggle()
 	{
 		if (!_toggle.interactable || !isActiveAndEnabled)
 		{
@@ -151,5 +133,13 @@ public class ToggleDataBind : Binder
 		Settings.Fsm?.Invoke("OnToggle", toggleName);
 
 		Model?.EventManager.Invoke($"OnToggle{toggleName}Click");
+	}
+
+	public void OnPointerDown(PointerEventData eventData)
+	{
+		if (!respondToKeyboardButtonPress)
+		{
+			OnClickToggle();
+		}
 	}
 }
