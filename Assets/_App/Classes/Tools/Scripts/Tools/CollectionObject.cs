@@ -6,15 +6,17 @@ namespace ClassesTools
 {
     public class CollectionObject : BasePoolObject
     {
-        [SerializeField] private TextMeshProUGUI _text;
+        [SerializeField] protected TextMeshProUGUI _text;
+        
+        protected CollectionData _data;
 
-        private string _data;
+        public CollectionData Data => _data;
 
         public void Init(CollectionData data)
         {
             gameObject.SetActive(true);
-            _data = data.info;
-            _text.text = _data;
+            _data = data;
+            _text.text = _data.info;
         }
 
         public override void Return()

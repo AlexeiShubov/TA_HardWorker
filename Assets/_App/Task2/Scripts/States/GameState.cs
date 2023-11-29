@@ -11,7 +11,7 @@ namespace Task2
     {
         private const string TOP_COLLECTION = "TopCollection";
         private const string BOTTOM_COLLECTION = "BottomCollection";
-        
+
         private readonly List<CollectionData> _topCollection;
         private readonly List<CollectionData> _bottomCollection;
 
@@ -26,13 +26,41 @@ namespace Task2
         {
             if (buttonName == "AddNewCardButton")
             {
-                AddNewCard();
+                CreateNewCard();
             }
         }
-        
-        private void AddNewCard()
+
+        [Bind]
+        private void OnCollectionObjectClick(CollectionObjectTaskTwo collectionObjectTaskTwo)
         {
-            ChangeCollection();
+            var currentCollectionName = collectionObjectTaskTwo.Data.CurrentCollectionName;
+            var targetCollection = currentCollectionName == BOTTOM_COLLECTION ? _bottomCollection : _topCollection;
+
+            for (var i = 0; i < targetCollection.Count; i++)
+            {
+                if (targetCollection[i] == collectionObjectTaskTwo.Data)
+                {
+                    ChangeCollectionElement(targetCollection, currentCollectionName == BOTTOM_COLLECTION ? _topCollection : _bottomCollection, targetCollection[i]);
+                    return;
+                }
+            }
+        }
+
+        private void ChangeCollectionElement(List<CollectionData> from, List<CollectionData> too, CollectionData collectionData)
+        {
+            from.Remove(collectionData);
+            too.Add(collectionData);
+            collectionData.CurrentCollectionName = collectionData.CurrentCollectionName == TOP_COLLECTION
+                ? BOTTOM_COLLECTION
+                : TOP_COLLECTION;
+            
+            Model.Set(BOTTOM_COLLECTION, _bottomCollection).Refresh(BOTTOM_COLLECTION);
+            Model.Set(TOP_COLLECTION, _topCollection).Refresh(TOP_COLLECTION);
+        }
+
+        private void CreateNewCard()
+        {
+            ChangeBottomCollection();
 
             if (!Model.ContainsKey(BOTTOM_COLLECTION))
             {
@@ -44,9 +72,9 @@ namespace Task2
             }
         }
 
-        private void ChangeCollection()
+        private void ChangeBottomCollection()
         {
-            _bottomCollection.Add(new CollectionData($"{Random.value:F2}"));
+            _bottomCollection.Add(new CollectionData($"{Random.value:F2}", BOTTOM_COLLECTION));
         }
     }
 }

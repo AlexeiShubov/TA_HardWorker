@@ -15,6 +15,10 @@ namespace ClassesTools
         private PoolMonoFactory<CollectionObject> _factory;
         private List<CollectionObject> _activeCollectionPrefabs;
 
+        public string CollectionName => _collectionName;
+        public Transform ParentObjects => _parent;
+        public List<CollectionObject> ActiveCollectionObjects => _activeCollectionPrefabs;
+
         [OnAwake]
         private void CustomAwake()
         {

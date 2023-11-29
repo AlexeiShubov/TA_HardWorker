@@ -571,7 +571,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalModel: 0
   _collectionName: TopCollection
-  _collectionObjectPrefab: {fileID: 4459136701566605868, guid: a20bb140b9275bf45a427f902f6e295b,
+  _collectionObjectPrefab: {fileID: 2636651241159783280, guid: a20bb140b9275bf45a427f902f6e295b,
     type: 3}
   _parent: {fileID: 958857231}
 --- !u!114 &958857233
@@ -595,7 +595,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 200, y: 320}
-  m_Spacing: {x: -40, y: 0}
+  m_Spacing: {x: -50, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!222 &958857235
@@ -659,7 +659,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalModel: 0
   _collectionName: BottomCollection
-  _collectionObjectPrefab: {fileID: 4459136701566605868, guid: a20bb140b9275bf45a427f902f6e295b,
+  _collectionObjectPrefab: {fileID: 2636651241159783280, guid: a20bb140b9275bf45a427f902f6e295b,
     type: 3}
   _parent: {fileID: 1516718553}
 --- !u!114 &1516718555
@@ -683,7 +683,7 @@ MonoBehaviour:
   m_StartCorner: 2
   m_StartAxis: 0
   m_CellSize: {x: 200, y: 320}
-  m_Spacing: {x: -40, y: 0}
+  m_Spacing: {x: -50, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!222 &1516718557

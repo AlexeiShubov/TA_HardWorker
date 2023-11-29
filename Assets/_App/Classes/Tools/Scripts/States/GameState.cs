@@ -59,7 +59,7 @@ namespace ClassesTools
 
             for (var i = 0; i < countIterations; i++)
             {
-                _collection.Add(new CollectionData($"{Random.value:F2}"));
+                _collection.Add(new CollectionData($"{Random.value:F2}", ButtonNames.CollectionContent));
             }
         }
 
