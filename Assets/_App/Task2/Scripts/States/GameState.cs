@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using AxGrid.FSM;
 using AxGrid.Model;
 using ClassesTools;
@@ -9,16 +10,28 @@ namespace Task2
     [State("GameState")]
     public class GameState : FSMState
     {
-        private const string TOP_COLLECTION = "TopCollection";
-        private const string BOTTOM_COLLECTION = "BottomCollection";
+        private const string _TOP_COLLECTION = "TopCollection";
+        private const string _BOTTOM_COLLECTION = "BottomCollection";
+        private const string _MIDLE_COLLECTION = "MidleCollection";
 
-        private readonly List<CollectionData> _topCollection;
-        private readonly List<CollectionData> _bottomCollection;
+        private readonly List<CollectionData> _topCollectionData;
+        private readonly List<CollectionData> _bottomCollectionData;
+        private readonly List<CollectionData> _midleCollectionData;
+
+        private readonly Dictionary<string, List<CollectionData>> _collectionDataMap;
 
         public GameState()
         {
-            _topCollection = new List<CollectionData>();
-            _bottomCollection = new List<CollectionData>();
+            _topCollectionData = new List<CollectionData>();
+            _bottomCollectionData = new List<CollectionData>();
+            _midleCollectionData = new List<CollectionData>();
+            
+            _collectionDataMap = new Dictionary<string, List<CollectionData>>
+            {
+                {_TOP_COLLECTION, _topCollectionData},
+                {_BOTTOM_COLLECTION, _bottomCollectionData},
+                {_MIDLE_COLLECTION, _midleCollectionData}
+            };
         }
 
         [Bind]
@@ -33,48 +46,58 @@ namespace Task2
         [Bind]
         private void OnCollectionObjectClick(CollectionObjectTaskTwo collectionObjectTaskTwo)
         {
-            var currentCollectionName = collectionObjectTaskTwo.Data.CurrentCollectionName;
-            var targetCollection = currentCollectionName == BOTTOM_COLLECTION ? _bottomCollection : _topCollection;
+            var currentCollectionData = collectionObjectTaskTwo.Data;
+            var currentCollectionName = currentCollectionData.CurrentCollectionName;
+            var targetCollectionName = GetNewCollectionNameForSwap(currentCollectionName);
+            var currentCollection = _collectionDataMap[currentCollectionName];
+            var targetCollection = _collectionDataMap[targetCollectionName];
 
-            for (var i = 0; i < targetCollection.Count; i++)
-            {
-                if (targetCollection[i] == collectionObjectTaskTwo.Data)
-                {
-                    ChangeCollectionElement(targetCollection, currentCollectionName == BOTTOM_COLLECTION ? _topCollection : _bottomCollection, targetCollection[i]);
-                    return;
-                }
-            }
+            ChangeCollectionElement(currentCollection, targetCollection, currentCollectionData, targetCollectionName);
         }
 
-        private void ChangeCollectionElement(List<CollectionData> from, List<CollectionData> too, CollectionData collectionData)
+        private string GetNewCollectionNameForSwap(string currentCollectionName)
+        {
+            var listCollections = (from item 
+                in _collectionDataMap 
+                where item.Key != currentCollectionName 
+                select item.Key).ToArray();
+
+            return listCollections[Random.Range(0, listCollections.Length)];
+        }
+
+        private void ChangeCollectionElement(List<CollectionData> from, List<CollectionData> too, CollectionData collectionData, string newCollectionNameData)
         {
             from.Remove(collectionData);
             too.Add(collectionData);
-            collectionData.CurrentCollectionName = collectionData.CurrentCollectionName == TOP_COLLECTION
-                ? BOTTOM_COLLECTION
-                : TOP_COLLECTION;
-            
-            Model.Set(BOTTOM_COLLECTION, _bottomCollection).Refresh(BOTTOM_COLLECTION);
-            Model.Set(TOP_COLLECTION, _topCollection).Refresh(TOP_COLLECTION);
+            collectionData.CurrentCollectionName = newCollectionNameData;
+
+            UpdateCollectionsInTheModel();
         }
 
         private void CreateNewCard()
         {
             ChangeBottomCollection();
 
-            if (!Model.ContainsKey(BOTTOM_COLLECTION))
+            if (!Model.ContainsKey(_BOTTOM_COLLECTION))
             {
-                Model.Set(BOTTOM_COLLECTION, _bottomCollection);
+                Model.Set(_BOTTOM_COLLECTION, _bottomCollectionData);
             }
             else
             {
-                Model.Set(BOTTOM_COLLECTION, _bottomCollection).Refresh(BOTTOM_COLLECTION);
+                Model.Set(_BOTTOM_COLLECTION, _bottomCollectionData).Refresh(_BOTTOM_COLLECTION);
             }
+        }
+
+        private void UpdateCollectionsInTheModel()
+        {
+            Model.Set(_BOTTOM_COLLECTION, _bottomCollectionData).Refresh(_BOTTOM_COLLECTION);
+            Model.Set(_TOP_COLLECTION, _topCollectionData).Refresh(_TOP_COLLECTION);
+            Model.Set(_MIDLE_COLLECTION, _midleCollectionData).Refresh(_MIDLE_COLLECTION);
         }
 
         private void ChangeBottomCollection()
         {
-            _bottomCollection.Add(new CollectionData($"{Random.value:F2}", BOTTOM_COLLECTION));
+            _bottomCollectionData.Add(new CollectionData($"{Random.value:F2}", _BOTTOM_COLLECTION));
         }
     }
 }
