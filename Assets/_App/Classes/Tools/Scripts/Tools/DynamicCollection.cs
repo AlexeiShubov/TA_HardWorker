@@ -56,6 +56,10 @@ namespace ClassesTools
                 newObject.Init(collection[i]);
                 _activeCollectionPrefabs.Add(newObject);
             }
+            
+            if(_activeCollectionPrefabs.Count == 0) return;
+            
+            _activeCollectionPrefabs[^1].transform.SetAsLastSibling();
         }
     }
 }
