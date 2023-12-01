@@ -3,69 +3,66 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ProjectManager : MonoBehaviour, IRestartable
+namespace UniRxTask
 {
-    [SerializeField] private SceneLoader _sceneLoader;
-    [SerializeField] private ChangerProgress _changerProgress;
-    [SerializeField] private Button _restartButton;
-
-    private CompositeDisposable _disposable;
-    private List<IRestartable> _restartables;
-    
-    private void Awake()
+    public class ProjectManager : MonoBehaviour, IRestartable
     {
-        _restartButton.interactable = false;
-        
-        _restartables = new List<IRestartable>
-        {
-            _sceneLoader,
-            _changerProgress,
-        };
-        
-        _changerProgress.Initialize();
-        _sceneLoader.Initialize(_changerProgress);
-        
-        Subscribe();
-    }
+        [SerializeField] private SceneLoader _sceneLoader;
+        [SerializeField] private ChangerProgress _changerProgress;
+        [SerializeField] private Button _restartButton;
 
-    public void Restart()
-    {
-        _disposable.Clear();
-        _restartButton.interactable = false;
+        private CompositeDisposable _disposable;
+        private List<IRestartable> _restartables;
 
-        foreach (var restartable in _restartables)
+        private void Awake()
         {
-            restartable.Restart();
+            _restartButton.interactable = false;
+
+            _restartables = new List<IRestartable>
+            {
+                _sceneLoader,
+                _changerProgress,
+            };
+
+            _changerProgress.Initialize();
+            _sceneLoader.Initialize(_changerProgress);
+
+            Subscribe();
         }
-        
-        Subscribe();
-    }
 
-    private void OnErrorLoadingScene()
-    {
-        _restartButton.interactable = true;
-        _disposable.Clear();
-    }
-
-    private void Subscribe()
-    {
-        _disposable = new CompositeDisposable();
-        
-        _restartButton
-            .OnClickAsObservable()
-            .Subscribe(_ =>
+        public void Restart()
         {
-            Restart();
-        });
+            _disposable.Clear();
+            _restartButton.interactable = false;
 
-        _changerProgress.exception.Subscribe(_ =>
+            foreach (var restartable in _restartables)
+            {
+                restartable.Restart();
+            }
+
+            Subscribe();
+        }
+
+        private void OnErrorLoadingScene()
         {
-            OnErrorLoadingScene();
-        }).AddTo(_disposable);
-    }
+            _restartButton.interactable = true;
+            _disposable.Clear();
+        }
 
-    private void OnDisable()
-    {
-        _disposable.Clear();
+        private void Subscribe()
+        {
+            _disposable = new CompositeDisposable();
+
+            _restartButton
+                .OnClickAsObservable()
+                .Subscribe(_ => { Restart(); });
+
+            _changerProgress.exception.Subscribe(_ => { OnErrorLoadingScene(); }).AddTo(_disposable);
+        }
+
+        private void OnDisable()
+        {
+            _disposable.Clear();
+        }
     }
 }
