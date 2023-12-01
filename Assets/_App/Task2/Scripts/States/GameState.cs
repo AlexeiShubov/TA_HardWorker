@@ -53,6 +53,7 @@ namespace Task2
             var targetCollection = _collectionDataMap[targetCollectionName];
 
             ChangeCollectionElement(currentCollection, targetCollection, currentCollectionData, targetCollectionName);
+            UpdateCollectionsInTheModel();
         }
 
         private string GetNewCollectionNameForSwap(string currentCollectionName)
@@ -70,8 +71,6 @@ namespace Task2
             from.Remove(collectionData);
             too.Add(collectionData);
             collectionData.CurrentCollectionName = newCollectionNameData;
-
-            UpdateCollectionsInTheModel();
         }
 
         private void CreateNewCard()
