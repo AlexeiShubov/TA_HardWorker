@@ -45,7 +45,6 @@ public class ProjectManager : MonoBehaviour, IRestartable
     {
         _restartButton.interactable = true;
         _disposable.Clear();
-        Debug.LogError("Custom Error Loading Scene");
     }
 
     private void Subscribe()
@@ -59,12 +58,10 @@ public class ProjectManager : MonoBehaviour, IRestartable
             Restart();
         });
 
-        _changerProgress.LoadingError
-            .Where(value => value)
-            .Subscribe(_ =>
+        _changerProgress.exception.Subscribe(_ =>
         {
             OnErrorLoadingScene();
-        });
+        }).AddTo(_disposable);
     }
 
     private void OnDisable()

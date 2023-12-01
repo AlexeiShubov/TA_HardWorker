@@ -1,6 +1,8 @@
+using System;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class ChangerProgress : MonoBehaviour, IRestartable
 {
@@ -12,15 +14,15 @@ public class ChangerProgress : MonoBehaviour, IRestartable
     private CompositeDisposable _disposable;
     private ReactiveCommand<float> _createException;
     private float _counter;
-    
-    public ReactiveProperty<float> LoadingProgress;
-    public ReactiveProperty<bool> LoadingError;
+
+    public Subject<Exception> exception;
+    public ReactiveProperty<float> loadingProgress;
 
     public void Initialize()
     {
-        LoadingProgress = new ReactiveProperty<float>();
-        LoadingError = new ReactiveProperty<bool>();
-        
+        exception = new Subject<Exception>();
+        loadingProgress = new ReactiveProperty<float>();
+
         Subscribe();
         DoAction();
     }
@@ -30,8 +32,7 @@ public class ChangerProgress : MonoBehaviour, IRestartable
         _disposable.Clear();
         
         _counter = default;
-        LoadingProgress.Value = default;
-        LoadingError.Value = default;
+        loadingProgress.Value = default;
         _progressImage.fillAmount = default;
         
         Subscribe();
@@ -43,8 +44,9 @@ public class ChangerProgress : MonoBehaviour, IRestartable
         _disposable = new CompositeDisposable();
         _createException = new ReactiveCommand<float>();
 
-        LoadingProgress
+        loadingProgress
             .Where(value => value >= 0.9f)
+            .First()
             .Subscribe(_ =>
             {
                 _createException.Execute(Random.value);
@@ -60,8 +62,8 @@ public class ChangerProgress : MonoBehaviour, IRestartable
         Observable.EveryUpdate()
             .Subscribe(_ =>
             {
-                LoadingProgress.Value = ++_counter / _countIterations;
-                _progressImage.fillAmount = LoadingProgress.Value;
+                loadingProgress.Value = ++_counter / _countIterations;
+                _progressImage.fillAmount = loadingProgress.Value;
             }).AddTo(_disposable);
     }
 
@@ -69,7 +71,7 @@ public class ChangerProgress : MonoBehaviour, IRestartable
     {
         if (value <= _errorChance)
         {
-            LoadingError.Value = true;
+            exception.OnNext(new Exception("Scene loading error!"));
             _disposable.Clear();
         }
     }

@@ -26,19 +26,19 @@ public class SceneLoader : MonoBehaviour, IRestartable
     {
         _disposable = new CompositeDisposable();
         
-        _changerProgress.LoadingProgress
+        _changerProgress.loadingProgress
             .Where(t => t >= 1f)
             .Subscribe(value =>
             {
                 SceneManager.LoadScene(1);
             }).AddTo(_disposable);
 
-        _changerProgress.LoadingError
-            .Where(value => value)
+        _changerProgress.exception
             .Subscribe(_ =>
         {
+            Debug.LogError("Custom Error Loading Scene");
             _disposable.Clear();
-        });
+        }).AddTo(_disposable);
     }
 
     private void OnDisable()
