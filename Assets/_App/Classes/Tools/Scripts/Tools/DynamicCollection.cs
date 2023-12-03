@@ -49,7 +49,7 @@ namespace ClassesTools
             {
                 var newObject = (CollectionObject) _pool.GetObject();
 
-                newObject.Init(collection[i]);
+                newObject.Init(collection[i], i);
                 _activeCollectionPrefabs.Add(newObject);
             }
             

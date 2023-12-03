@@ -2,11 +2,11 @@ namespace ClassesTools
 {
     public class CollectionData
     {
-        public readonly string info;
+        public readonly int info;
         
         public string CurrentCollectionName { get; set; }
 
-        public CollectionData(string info, string currentCollectionName)
+        public CollectionData(int info, string currentCollectionName)
         {
             this.info = info;
             CurrentCollectionName = currentCollectionName;

@@ -12,5 +12,10 @@ namespace Task2
         {
             Settings.Invoke(_ON_COLLECTION_OBJECT_CLICK, this);
         }
+
+        public void OnClick()
+        {
+            OnPointerClick(null);
+        }
     }
 }

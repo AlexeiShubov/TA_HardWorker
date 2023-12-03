@@ -553,7 +553,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.75555557}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.5, y: 2.189972}
+  m_AnchoredPosition: {x: -0.5, y: 2.1899414}
   m_SizeDelta: {x: 1, y: -4.380005}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &958857235
@@ -821,14 +821,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1787675781}
-  - component: {fileID: 1787675782}
   m_Layer: 0
   m_Name: CardAnimator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1787675781
 Transform:
   m_ObjectHideFlags: 0
@@ -844,21 +843,6 @@ Transform:
   m_Father: {fileID: 785018130}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1787675782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1787675780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23b028e6d68fdc54c93fb5bd5ba4647a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  globalModel: 0
-  _bottomCollection: {fileID: 1516718553}
-  _prefab: {fileID: 1089558564834514894, guid: 38b9358dfd698b34ca2e22ec70106c05, type: 3}
 --- !u!1 &1814653763
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,14 +852,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1814653764}
-  - component: {fileID: 1814653765}
   m_Layer: 0
   m_Name: Initialize
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1814653764
 Transform:
   m_ObjectHideFlags: 0
@@ -891,16 +874,83 @@ Transform:
   m_Father: {fileID: 785018130}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1814653765
+--- !u!1 &1904021784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1904021786}
+  - component: {fileID: 1904021787}
+  m_Layer: 0
+  m_Name: Test
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1904021786
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1904021784}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1904021787
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1814653763}
+  m_GameObject: {fileID: 1904021784}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c49007ac98fdd240a09019ab54db4d2, type: 3}
+  m_Script: {fileID: 11500000, guid: 13ec384ce413dfd40a9ae79c626f1198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   globalModel: 0
+  _delay: 0.5
+  _offsetX: 1.25
+  _parent: {fileID: 1968288627}
+  _prefab: {fileID: 801353914923950287, guid: 60ab23d03c6cd0e428734ebccfd284d7, type: 3}
+--- !u!1 &1968288626
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1968288627}
+  m_Layer: 0
+  m_Name: BottomCollection
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1968288627
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968288626}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -2.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
