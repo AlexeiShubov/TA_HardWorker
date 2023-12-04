@@ -7,16 +7,20 @@ namespace ClassesTools
 {
     public class DynamicCollection : MonoBehaviourExtBind
     {
-        [SerializeField] private string _collectionName;
-        [SerializeField] private CollectionObject _collectionObjectPrefab;
-        [SerializeField] private Transform _parent;
-
-        private ObjectPool<CollectionObject> _pool;
+        [SerializeField] protected string _collectionName;
+        [SerializeField] protected CollectionObject _collectionObjectPrefab;
+        [SerializeField] protected Transform _parent;
+        
         private PoolMonoFactory<CollectionObject> _factory;
-        private List<CollectionObject> _activeCollectionPrefabs;
+
+        protected ObjectPool<CollectionObject> _pool;
+        protected List<CollectionObject> _activeCollectionPrefabs;
+
+        public Transform Parent => _parent;
+        public List<CollectionObject> ActiveCollectionPrefabs => _activeCollectionPrefabs;
 
         [OnAwake]
-        private void CustomAwake()
+        protected void CustomAwake()
         {
             _factory = new PoolMonoFactory<CollectionObject>(_collectionObjectPrefab, _parent);
             _pool = new BaseMonoPool<CollectionObject>(_factory);
@@ -24,7 +28,7 @@ namespace ClassesTools
         }
 
         [OnStart]
-        private void CustomStart()
+        protected void CustomStart()
         {
             if (string.IsNullOrEmpty(_collectionName))
             {
@@ -34,23 +38,37 @@ namespace ClassesTools
             Model.EventManager.AddAction<List<CollectionData>>($"On{_collectionName}Changed", OnCollectionChanged);
         }
 
-        private void OnCollectionChanged(List<CollectionData> collection)
+        protected virtual void OnCollectionChanged(List<CollectionData> collection)
         {
-            var countIterations = collection.Count;
+            Debug.LogError("--------------------------------------------------");
 
-            foreach (var collectionObject in _activeCollectionPrefabs)
+            var countNewCollectionObjects = collection.Count - _activeCollectionPrefabs.Count;
+Debug.LogError(countNewCollectionObjects + " " +  _collectionName);
+            if (countNewCollectionObjects > 0)
             {
-                collectionObject.Return();
+                for (var i = 0; i < countNewCollectionObjects; i++)
+                {
+                    _activeCollectionPrefabs.Add((CollectionObject) _pool.GetObject());
+                }
             }
 
-            _activeCollectionPrefabs.Clear();
-
-            for (var i = 0; i < countIterations; i++)
+            if (countNewCollectionObjects < 0)
             {
-                var newObject = (CollectionObject) _pool.GetObject();
-
-                newObject.Init(collection[i], i);
-                _activeCollectionPrefabs.Add(newObject);
+                for (var i = Mathf.Abs(countNewCollectionObjects); i < _activeCollectionPrefabs.Count; i++)
+                {
+                    _activeCollectionPrefabs[i].Return();
+                    _activeCollectionPrefabs.Remove(_activeCollectionPrefabs[i]);
+                }
+            }
+            
+            for (var i = 0; i < collection.Count; i++)
+            {
+                if (collection.Count != _activeCollectionPrefabs.Count)
+                {
+                    Debug.LogError("Ты где-то прое**ался. Опять!!!");
+                }
+                
+                _activeCollectionPrefabs[i].Init(collection[i]);
             }
             
             if(_activeCollectionPrefabs.Count == 0) return;
