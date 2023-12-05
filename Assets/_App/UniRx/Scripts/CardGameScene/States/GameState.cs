@@ -12,9 +12,11 @@ namespace UniRxTask
     public class GameState : FSMState
     {
         private const string _TOP_COLLECTION = "TopCollection";
+        private const string _MIDLE_COLLECTION = "MidleCollection";
         private const string _BOTTOM_COLLECTION = "BottomCollection";
 
         private readonly List<CollectionData> _topCollectionData;
+        private readonly List<CollectionData> _midleCollectionData;
         private readonly List<CollectionData> _bottomCollectionData;
         private readonly Dictionary<string, List<CollectionData>> _collectionDataMap;
 
@@ -24,11 +26,13 @@ namespace UniRxTask
         {
             _collectionsViewController = collectionsViewController;
             _topCollectionData = new List<CollectionData>();
+            _midleCollectionData = new List<CollectionData>();
             _bottomCollectionData = new List<CollectionData>();
             
             _collectionDataMap = new Dictionary<string, List<CollectionData>>
             {
                 {_TOP_COLLECTION, _topCollectionData},
+                {_MIDLE_COLLECTION, _midleCollectionData},
                 {_BOTTOM_COLLECTION, _bottomCollectionData}
             };
         }
@@ -52,7 +56,6 @@ namespace UniRxTask
             var targetCollection = _collectionDataMap[targetCollectionName];
 
             ChangeDataCollectionElement(currentCollection, targetCollection, currentCollectionData, targetCollectionName);
-            UpdateCollectionsInTheModel();
         }
 
         private string GetNewCollectionNameForSwap(string currentCollectionName)
@@ -67,12 +70,17 @@ namespace UniRxTask
 
         private void ChangeDataCollectionElement(List<CollectionData> from, List<CollectionData> too, CollectionData collectionData, string newCollectionNameData)
         {
-            Debug.LogError(from.Count);
             from.Remove(collectionData);
-            Debug.LogError(from.Count);
             too.Add(collectionData);
-            collectionData.Priority = too.Count + 1;
-            collectionData.CurrentCollectionName = newCollectionNameData;
+
+            UpdateCollectionData(from, collectionData.CurrentCollectionName);
+            UpdateCollectionData(too, newCollectionNameData);
+            
+            UpdateCollectionsInTheModel();
+            
+            _collectionsViewController.OnCollectionChanged(_BOTTOM_COLLECTION, newCollectionNameData == _BOTTOM_COLLECTION);
+            _collectionsViewController.OnCollectionChanged(_MIDLE_COLLECTION, newCollectionNameData == _MIDLE_COLLECTION);
+            _collectionsViewController.OnCollectionChanged(_TOP_COLLECTION, newCollectionNameData == _TOP_COLLECTION);
         }
 
         private void CreateNewCard()
@@ -80,25 +88,36 @@ namespace UniRxTask
             var newCollectionData = new CollectionData(_bottomCollectionData.Count + 1, _BOTTOM_COLLECTION, _bottomCollectionData.Count + 1);
             _bottomCollectionData.Add(newCollectionData);
 
-            if (!Model.ContainsKey(_BOTTOM_COLLECTION))
-            {
-                Model.Set(_BOTTOM_COLLECTION, _bottomCollectionData);
-            }
-            else
-            {
-                Model.Set(_BOTTOM_COLLECTION, _bottomCollectionData).Refresh(_BOTTOM_COLLECTION);
-            }
-            
-            _collectionsViewController.OnCollectionChanged(_BOTTOM_COLLECTION);
+            UpdateCollectionInTheModel(_BOTTOM_COLLECTION, _bottomCollectionData);
+            _collectionsViewController.OnCollectionChanged(_BOTTOM_COLLECTION, true);
         }
 
         private void UpdateCollectionsInTheModel()
         {
-            Model.Set(_BOTTOM_COLLECTION, _bottomCollectionData);
-            Model.Set(_TOP_COLLECTION, _topCollectionData);
-            
-            /*_collectionsViewController.OnCollectionChanged(_BOTTOM_COLLECTION);
-            _collectionsViewController.OnCollectionChanged(_TOP_COLLECTION);*/
+            UpdateCollectionInTheModel(_TOP_COLLECTION, _topCollectionData);
+            UpdateCollectionInTheModel(_MIDLE_COLLECTION, _midleCollectionData);
+            UpdateCollectionInTheModel(_BOTTOM_COLLECTION, _bottomCollectionData);
+        }
+
+        private void UpdateCollectionData(List<CollectionData> collectionDatas, string collectionNameData)
+        {
+            for (var i = 0; i < collectionDatas.Count; i++)
+            {
+                collectionDatas[i].Priority = i;
+                collectionDatas[i].CurrentCollectionName = collectionNameData;
+            }
+        }
+
+        private void UpdateCollectionInTheModel(string collectionName, List<CollectionData> collectionDatas)
+        {
+            if (!Model.ContainsKey(collectionName))
+            {
+                Model.Set(collectionName, collectionDatas);
+            }
+            else
+            {
+                Model.Set(collectionName, collectionDatas).Refresh(collectionName);
+            }
         }
     }
 }

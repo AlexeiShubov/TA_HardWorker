@@ -46,6 +46,7 @@ namespace Task2
         [Bind]
         private void OnCollectionObjectClick(CollectionObjectTaskTwo collectionObjectTaskTwo)
         {
+            Debug.LogError("Task2 Game State");
             var currentCollectionData = collectionObjectTaskTwo.Data;
             var currentCollectionName = currentCollectionData.CurrentCollectionName;
             var targetCollectionName = GetNewCollectionNameForSwap(currentCollectionName);

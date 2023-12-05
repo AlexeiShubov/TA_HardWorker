@@ -38,7 +38,7 @@ namespace UniRxTask
             MoveObject(CreateNewPath(), transform, Vector2.zero, targetPosition);
         }
 
-        [Bind]
+        /*[Bind]
         private void OnCollectionObjectClick(CollectionObjectTaskTwo collectionObject)
         {
             Debug.LogError("---------------");
@@ -47,7 +47,7 @@ namespace UniRxTask
             Destroy(card.gameObject);
             UpdateInfoCollectionObject();
             MoveParent(new Vector2(-GetTargetPositionForNewCollectionObject().x * 0.5f, _parent.localPosition.y));
-        }
+        }*/
 
         private void MoveParent(Vector2 targetPosition)
         {

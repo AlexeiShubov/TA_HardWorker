@@ -41,33 +41,38 @@ namespace ClassesTools
         protected virtual void OnCollectionChanged(List<CollectionData> collection)
         {
             Debug.LogError("--------------------------------------------------");
+            
+            var differenceBetweenTwoCollections = collection.Count - _activeCollectionPrefabs.Count;
 
-            var countNewCollectionObjects = collection.Count - _activeCollectionPrefabs.Count;
-Debug.LogError(countNewCollectionObjects + " " +  _collectionName);
-            if (countNewCollectionObjects > 0)
+            if (differenceBetweenTwoCollections > 0)
             {
-                for (var i = 0; i < countNewCollectionObjects; i++)
+                for (var i = 0; i < differenceBetweenTwoCollections; i++)
                 {
-                    _activeCollectionPrefabs.Add((CollectionObject) _pool.GetObject());
+                    var newCollectionObject = (CollectionObject) _pool.GetObject();
+                    
+                    _activeCollectionPrefabs.Add(newCollectionObject);
+                    newCollectionObject.transform.localPosition = Vector3.zero;
                 }
             }
 
-            if (countNewCollectionObjects < 0)
+            if (differenceBetweenTwoCollections < 0)
             {
-                for (var i = Mathf.Abs(countNewCollectionObjects); i < _activeCollectionPrefabs.Count; i++)
+                for (var i = Mathf.Abs(differenceBetweenTwoCollections); i > 0; i--)
                 {
-                    _activeCollectionPrefabs[i].Return();
-                    _activeCollectionPrefabs.Remove(_activeCollectionPrefabs[i]);
+                    _activeCollectionPrefabs[^i].Return();
+                    _activeCollectionPrefabs.Remove(_activeCollectionPrefabs[^i]);
                 }
+            }
+            
+            if (collection.Count != _activeCollectionPrefabs.Count)
+            {
+                Debug.LogError("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                Debug.LogError("!!!!!!!!!!!!!!!!!!!!!!!********************************!!!!!!!!!!!!!!!!!!!");
+                Debug.LogError("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
             
             for (var i = 0; i < collection.Count; i++)
             {
-                if (collection.Count != _activeCollectionPrefabs.Count)
-                {
-                    Debug.LogError("Ты где-то прое**ался. Опять!!!");
-                }
-                
                 _activeCollectionPrefabs[i].Init(collection[i]);
             }
             

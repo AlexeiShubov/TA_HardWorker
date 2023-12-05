@@ -29,7 +29,6 @@ namespace ClassesTools
         public override void Return()
         {
             base.Return();
-
             gameObject.SetActive(false);
         }
     }
