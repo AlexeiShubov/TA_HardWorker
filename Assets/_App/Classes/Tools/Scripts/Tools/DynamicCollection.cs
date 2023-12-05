@@ -40,8 +40,6 @@ namespace ClassesTools
 
         protected virtual void OnCollectionChanged(List<CollectionData> collection)
         {
-            Debug.LogError("--------------------------------------------------");
-            
             var differenceBetweenTwoCollections = collection.Count - _activeCollectionPrefabs.Count;
 
             if (differenceBetweenTwoCollections > 0)
@@ -63,14 +61,7 @@ namespace ClassesTools
                     _activeCollectionPrefabs.Remove(_activeCollectionPrefabs[^i]);
                 }
             }
-            
-            if (collection.Count != _activeCollectionPrefabs.Count)
-            {
-                Debug.LogError("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                Debug.LogError("!!!!!!!!!!!!!!!!!!!!!!!********************************!!!!!!!!!!!!!!!!!!!");
-                Debug.LogError("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            }
-            
+
             for (var i = 0; i < collection.Count; i++)
             {
                 _activeCollectionPrefabs[i].Init(collection[i]);
