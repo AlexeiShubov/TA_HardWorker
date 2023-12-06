@@ -75,12 +75,6 @@ namespace UniRxTask
 
             UpdateCollectionData(from, collectionData.CurrentCollectionName);
             UpdateCollectionData(too, newCollectionNameData);
-            
-            UpdateCollectionsInTheModel();
-            
-            /*_collectionsViewController.OnCollectionChanged(_BOTTOM_COLLECTION, newCollectionNameData == _BOTTOM_COLLECTION);
-            _collectionsViewController.OnCollectionChanged(_MIDLE_COLLECTION, newCollectionNameData == _MIDLE_COLLECTION);
-            _collectionsViewController.OnCollectionChanged(_TOP_COLLECTION, newCollectionNameData == _TOP_COLLECTION);*/
         }
 
         private void CreateNewCard()
@@ -89,16 +83,7 @@ namespace UniRxTask
             var newCollectionData = new CollectionData(newID, _bottomCollectionData.Count + 1, _BOTTOM_COLLECTION, _bottomCollectionData.Count + 1);
             _bottomCollectionData.Add(newCollectionData);
 
-            Model.EventManager.Invoke("CreateNewCollectionObject", newCollectionData);
-            
-            //_collectionsViewController.OnCollectionChanged(_BOTTOM_COLLECTION, true);
-        }
-
-        private void UpdateCollectionsInTheModel()
-        {
-            UpdateCollectionInTheModel(_TOP_COLLECTION, _topCollectionData);
-            UpdateCollectionInTheModel(_MIDLE_COLLECTION, _midleCollectionData);
-            UpdateCollectionInTheModel(_BOTTOM_COLLECTION, _bottomCollectionData);
+            Model.EventManager.Invoke("CreateNewCollectionObject", newCollectionData, _BOTTOM_COLLECTION);
         }
 
         private void UpdateCollectionData(List<CollectionData> collectionDatas, string collectionNameData)
@@ -108,17 +93,19 @@ namespace UniRxTask
                 collectionDatas[i].Priority = i;
                 collectionDatas[i].CurrentCollectionName = collectionNameData;
             }
+            
+            UpdateCollectionInTheModel(collectionNameData, collectionDatas);
         }
 
         private void UpdateCollectionInTheModel(string collectionName, List<CollectionData> collectionDatas)
         {
             if (!Model.ContainsKey(collectionName))
             {
-                Model.Set(collectionName, collectionDatas);
+                Model.EventManager.Invoke($"On{collectionName}Changed", collectionDatas, collectionName);
             }
             else
             {
-                Model.Set(collectionName, collectionDatas).Refresh(collectionName);
+                Model.EventManager.Invoke($"On{collectionName}Changed", collectionDatas, collectionName);
             }
         }
     }

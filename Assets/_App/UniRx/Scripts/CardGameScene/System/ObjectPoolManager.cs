@@ -3,37 +3,40 @@ using ClassesTools;
 using STIGRADOR;
 using UnityEngine;
 
-public class ObjectPoolManager : MonoBehaviour
+namespace UniRxTask
 {
-    [SerializeField] private CollectionObject _collectionObjectPrefab;
-
-    private List<CollectionObject> _activeObjects;
-    private PoolMonoFactory<CollectionObject> _factory;
-    private ObjectPool<CollectionObject> _pool;
-
-    private void Awake()
+    public class ObjectPoolManager : MonoBehaviour
     {
-        _activeObjects = new List<CollectionObject>();
-        _factory = new PoolMonoFactory<CollectionObject>(_collectionObjectPrefab, transform);
-        _pool = new BaseMonoPool<CollectionObject>(_factory);
-    }
+        [SerializeField] private CollectionObject _collectionObjectPrefab;
 
-    public CollectionObject GetCollectionObject()
-    {
-        var newCollectionObject = (CollectionObject) _pool.GetObject();
-        _activeObjects.Add(newCollectionObject);
+        private List<CollectionObject> _activeObjects;
+        private PoolMonoFactory<CollectionObject> _factory;
+        private ObjectPool<CollectionObject> _pool;
 
-        return newCollectionObject;
-    }
+        private void Awake()
+        {
+            _activeObjects = new List<CollectionObject>();
+            _factory = new PoolMonoFactory<CollectionObject>(_collectionObjectPrefab, transform);
+            _pool = new BaseMonoPool<CollectionObject>(_factory);
+        }
 
-    public CollectionObject FindObjectWithID(int ID)
-    {
-        return _activeObjects.Find(t => t.Data.ID == ID);
-    }
+        public CollectionObject GetCollectionObject()
+        {
+            var newCollectionObject = (CollectionObject) _pool.GetObject();
+            _activeObjects.Add(newCollectionObject);
 
-    public void ReturnObject(CollectionObject collectionObject)
-    {
-        _pool.ReturnObject(collectionObject);
-        _activeObjects.Remove(collectionObject);
+            return newCollectionObject;
+        }
+
+        public CollectionObject FindObjectWithID(int ID)
+        {
+            return _activeObjects.Find(t => t.Data.ID == ID);
+        }
+
+        public void ReturnObject(CollectionObject collectionObject)
+        {
+            _pool.ReturnObject(collectionObject);
+            _activeObjects.Remove(collectionObject);
+        }
     }
 }

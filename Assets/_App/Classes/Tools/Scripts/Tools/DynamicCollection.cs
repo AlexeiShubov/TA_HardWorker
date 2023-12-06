@@ -8,7 +8,6 @@ namespace ClassesTools
 {
     public class DynamicCollection : MonoBehaviourExtBind
     {
-        [SerializeField] private bool _spawningCollection;
         [SerializeField] private string _collectionName;
         [SerializeField] private ObjectPoolManager _objectPoolManager;
         [SerializeField] private Transform _parent;
@@ -38,13 +37,13 @@ namespace ClassesTools
                 _collectionName = "CollectionContent";
             }
 
-            Model.EventManager.AddAction<List<CollectionData>>($"On{_collectionName}Changed", OnCollectionChanged);
+            Model.EventManager.AddAction<List<CollectionData>, string>($"On{_collectionName}Changed", OnCollectionChanged);
         }
 
         [Bind]
-        private void CreateNewCollectionObject(CollectionData collectionData)
+        private void CreateNewCollectionObject(CollectionData collectionData, string collectionName)
         {
-            if(!_spawningCollection) return;
+            if(collectionName != _collectionName) return;
             
             var newCollectionObject = _objectPoolManager.GetCollectionObject();
             
@@ -57,44 +56,23 @@ namespace ClassesTools
         }
 
         [Bind]
-        private void OnCollectionChanged(List<CollectionData> newCollectionDatas)
+        private void OnCollectionChanged(List<CollectionData> newCollectionDatas, string collectionName)
         {
+            if(collectionName != _collectionName) return;
+
+            _activeCollectionPrefabs.Clear();
+            
             foreach (var data in newCollectionDatas)
             {
-                
+                var obj = _objectPoolManager.FindObjectWithID(data.ID);
+
+                obj.transform.parent = transform;
+                obj.Init(data);
+                _activeCollectionPrefabs.Add(obj);
+                obj.MoveTo(GetTargetPositionForCollectionObject());
             }
             
-            return;
-            var differenceBetweenTwoCollections = newCollectionDatas.Count - _activeCollectionPrefabs.Count;
-
-            if (differenceBetweenTwoCollections > 0)
-            {
-                for (var i = 0; i < differenceBetweenTwoCollections; i++)
-                {
-                    /*var newCollectionObject = (CollectionObject) _objectPoolManager.GetObject();
-
-                    _activeCollectionPrefabs.Add(newCollectionObject);
-                    newCollectionObject.transform.localPosition = Vector3.zero;*/
-                }
-            }
-
-            if (differenceBetweenTwoCollections < 0)
-            {
-                for (var i = Mathf.Abs(differenceBetweenTwoCollections); i > 0; i--)
-                {
-                    _activeCollectionPrefabs[^i].Return();
-                    _activeCollectionPrefabs.Remove(_activeCollectionPrefabs[^i]);
-                }
-            }
-
-            for (var i = 0; i < newCollectionDatas.Count; i++)
-            {
-                _activeCollectionPrefabs[i].Init(newCollectionDatas[i]);
-            }
-
-            if (_activeCollectionPrefabs.Count == 0) return;
-
-            _activeCollectionPrefabs[^1].transform.SetAsLastSibling();
+            _animator.MoveCollectionTransform(CreateNewPath());
         }
 
         private Vector2 GetTargetPositionForCollectionObject()
@@ -104,7 +82,7 @@ namespace ClassesTools
 
         private void OnDisable()
         {
-            Model.EventManager.RemoveAction<List<CollectionData>>($"On{_collectionName}Changed", OnCollectionChanged);
+            Model.EventManager.RemoveAction<List<CollectionData>, string>($"On{_collectionName}Changed", OnCollectionChanged);
         }
     }
 }

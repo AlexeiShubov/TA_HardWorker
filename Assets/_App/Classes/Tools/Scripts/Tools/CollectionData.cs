@@ -15,10 +15,5 @@ namespace ClassesTools
             CurrentCollectionName = currentCollectionName;
             Priority = priority;
         }
-        
-        public override string ToString()
-        {
-            return $"ID: {ID}, CollectionName: {CurrentCollectionName}, Priority: {Priority}";
-        }
     }
 }
