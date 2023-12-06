@@ -97,7 +97,8 @@ namespace Task2
 
         private void ChangeBottomCollection()
         {
-            _bottomCollectionData.Add(new CollectionData(Random.Range(0, 100), _BOTTOM_COLLECTION, 0));
+            var newID = _collectionDataMap.Sum(item => item.Value.Count);
+            _bottomCollectionData.Add(new CollectionData(newID, Random.Range(0, 100), _BOTTOM_COLLECTION, 0));
         }
     }
 }

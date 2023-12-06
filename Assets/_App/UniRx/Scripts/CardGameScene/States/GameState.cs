@@ -85,7 +85,8 @@ namespace UniRxTask
 
         private void CreateNewCard()
         {
-            var newCollectionData = new CollectionData(_bottomCollectionData.Count + 1, _BOTTOM_COLLECTION, _bottomCollectionData.Count + 1);
+            var newID = _collectionDataMap.Sum(item => item.Value.Count);
+            var newCollectionData = new CollectionData(newID, _bottomCollectionData.Count + 1, _BOTTOM_COLLECTION, _bottomCollectionData.Count + 1);
             _bottomCollectionData.Add(newCollectionData);
 
             UpdateCollectionInTheModel(_BOTTOM_COLLECTION, _bottomCollectionData);
