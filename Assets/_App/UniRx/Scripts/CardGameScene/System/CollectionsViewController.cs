@@ -43,8 +43,7 @@ namespace UniRxTask
             var collectionObject = collection.ActiveCollectionPrefabs[^1].transform;
             var targetLocalPosition = GetTargetPositionForCollectionObject(collection.ActiveCollectionPrefabs.Count);
 
-            MoveParent(new Vector2(-targetLocalPosition.x * 0.5f, collection.Parent.localPosition.y),
-                collection.Parent);
+            MoveParent(new Vector2(-targetLocalPosition.x * 0.5f, collection.Parent.localPosition.y), collection.Parent);
 
             if (!moveCards) return;
 

@@ -1,20 +1,24 @@
 using System.Collections.Generic;
 using AxGrid.Base;
-using STIGRADOR;
+using AxGrid.Model;
+using UniRxTask;
 using UnityEngine;
 
 namespace ClassesTools
 {
     public class DynamicCollection : MonoBehaviourExtBind
     {
-        [SerializeField] protected string _collectionName;
-        [SerializeField] protected CollectionObject _collectionObjectPrefab;
-        [SerializeField] protected Transform _parent;
-        
-        private PoolMonoFactory<CollectionObject> _factory;
+        [SerializeField] private bool _spawningCollection;
+        [SerializeField] private string _collectionName;
+        [SerializeField] private ObjectPoolManager _objectPoolManager;
+        [SerializeField] private Transform _parent;
 
-        protected ObjectPool<CollectionObject> _pool;
-        protected List<CollectionObject> _activeCollectionPrefabs;
+        [Space(5)] [Tooltip("Animation settings")] 
+        [SerializeField] private float _delayCollectionMoving = 0.5f;
+        [SerializeField] private float _collectionObjectOffset = 1.25f;
+        
+        private ICollectionAnimator _animator;
+        private List<CollectionObject> _activeCollectionPrefabs;
 
         public Transform Parent => _parent;
         public List<CollectionObject> ActiveCollectionPrefabs => _activeCollectionPrefabs;
@@ -22,13 +26,12 @@ namespace ClassesTools
         [OnAwake]
         protected void CustomAwake()
         {
-            _factory = new PoolMonoFactory<CollectionObject>(_collectionObjectPrefab, _parent);
-            _pool = new BaseMonoPool<CollectionObject>(_factory);
             _activeCollectionPrefabs = new List<CollectionObject>();
+            _animator = new CollectionHorizontalMover(_delayCollectionMoving, _collectionObjectOffset, this);
         }
 
         [OnStart]
-        protected void CustomStart()
+        private void CustomStart()
         {
             if (string.IsNullOrEmpty(_collectionName))
             {
@@ -38,18 +41,40 @@ namespace ClassesTools
             Model.EventManager.AddAction<List<CollectionData>>($"On{_collectionName}Changed", OnCollectionChanged);
         }
 
-        protected virtual void OnCollectionChanged(List<CollectionData> collection)
+        [Bind]
+        private void CreateNewCollectionObject(CollectionData collectionData)
         {
-            var differenceBetweenTwoCollections = collection.Count - _activeCollectionPrefabs.Count;
+            if(!_spawningCollection) return;
+            
+            var newCollectionObject = _objectPoolManager.GetCollectionObject();
+            
+            _activeCollectionPrefabs.Add(newCollectionObject);
+            newCollectionObject.transform.SetParent(_parent);
+            newCollectionObject.transform.localPosition = Vector3.zero;
+            newCollectionObject.Init(collectionData);
+            newCollectionObject.MoveTo(GetTargetPositionForCollectionObject());
+            _animator.MoveCollectionTransform(CreateNewPath());
+        }
+
+        [Bind]
+        private void OnCollectionChanged(List<CollectionData> newCollectionDatas)
+        {
+            foreach (var data in newCollectionDatas)
+            {
+                
+            }
+            
+            return;
+            var differenceBetweenTwoCollections = newCollectionDatas.Count - _activeCollectionPrefabs.Count;
 
             if (differenceBetweenTwoCollections > 0)
             {
                 for (var i = 0; i < differenceBetweenTwoCollections; i++)
                 {
-                    var newCollectionObject = (CollectionObject) _pool.GetObject();
-                    
+                    /*var newCollectionObject = (CollectionObject) _objectPoolManager.GetObject();
+
                     _activeCollectionPrefabs.Add(newCollectionObject);
-                    newCollectionObject.transform.localPosition = Vector3.zero;
+                    newCollectionObject.transform.localPosition = Vector3.zero;*/
                 }
             }
 
@@ -62,14 +87,24 @@ namespace ClassesTools
                 }
             }
 
-            for (var i = 0; i < collection.Count; i++)
+            for (var i = 0; i < newCollectionDatas.Count; i++)
             {
-                _activeCollectionPrefabs[i].Init(collection[i]);
+                _activeCollectionPrefabs[i].Init(newCollectionDatas[i]);
             }
-            
-            if(_activeCollectionPrefabs.Count == 0) return;
-            
+
+            if (_activeCollectionPrefabs.Count == 0) return;
+
             _activeCollectionPrefabs[^1].transform.SetAsLastSibling();
+        }
+
+        private Vector2 GetTargetPositionForCollectionObject()
+        {
+            return new Vector2((_activeCollectionPrefabs.Count - 1) * _collectionObjectOffset, 0f);
+        }
+
+        private void OnDisable()
+        {
+            Model.EventManager.RemoveAction<List<CollectionData>>($"On{_collectionName}Changed", OnCollectionChanged);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace ClassesTools
         public void MoveTo(Vector2 targetPosition)
         {
             _isMoving = true;
-            _cPath.Clear();
+            _cPath?.Clear();
             _cPath = CPath.Create();
 
             var startLocalPosition = transform.localPosition;

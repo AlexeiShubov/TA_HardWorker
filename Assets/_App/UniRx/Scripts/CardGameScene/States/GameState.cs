@@ -78,9 +78,9 @@ namespace UniRxTask
             
             UpdateCollectionsInTheModel();
             
-            _collectionsViewController.OnCollectionChanged(_BOTTOM_COLLECTION, newCollectionNameData == _BOTTOM_COLLECTION);
+            /*_collectionsViewController.OnCollectionChanged(_BOTTOM_COLLECTION, newCollectionNameData == _BOTTOM_COLLECTION);
             _collectionsViewController.OnCollectionChanged(_MIDLE_COLLECTION, newCollectionNameData == _MIDLE_COLLECTION);
-            _collectionsViewController.OnCollectionChanged(_TOP_COLLECTION, newCollectionNameData == _TOP_COLLECTION);
+            _collectionsViewController.OnCollectionChanged(_TOP_COLLECTION, newCollectionNameData == _TOP_COLLECTION);*/
         }
 
         private void CreateNewCard()
@@ -89,8 +89,9 @@ namespace UniRxTask
             var newCollectionData = new CollectionData(newID, _bottomCollectionData.Count + 1, _BOTTOM_COLLECTION, _bottomCollectionData.Count + 1);
             _bottomCollectionData.Add(newCollectionData);
 
-            UpdateCollectionInTheModel(_BOTTOM_COLLECTION, _bottomCollectionData);
-            _collectionsViewController.OnCollectionChanged(_BOTTOM_COLLECTION, true);
+            Model.EventManager.Invoke("CreateNewCollectionObject", newCollectionData);
+            
+            //_collectionsViewController.OnCollectionChanged(_BOTTOM_COLLECTION, true);
         }
 
         private void UpdateCollectionsInTheModel()
