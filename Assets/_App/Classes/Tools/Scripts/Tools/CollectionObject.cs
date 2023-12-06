@@ -61,8 +61,6 @@ namespace ClassesTools
             _text.text = _data.info.ToString();
             _spriteRenderer.sortingOrder = data.Priority;
             _canvas.sortingOrder = data.Priority;
-            
-            Debug.LogError(_data);
         }
     }
 }
