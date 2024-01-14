@@ -58,7 +58,7 @@ namespace ClassesTools
         private void UpdateData(CollectionData data)
         {
             _data = data;
-            _text.text = _data.info.ToString();
+            _text.text = _data.ID.ToString();
             _spriteRenderer.sortingOrder = data.Priority;
             _canvas.sortingOrder = data.Priority;
         }
